@@ -1,0 +1,15 @@
+# name: nibabel NIFTI load
+# key: nibload
+# --
+import nibabel as nib
+import numpy as np
+
+img = nib.load("${1:path/to/image.nii.gz}")
+data: np.ndarray = img.get_fdata()   # shape: ${2:(X, Y, Z)}
+affine = img.affine
+header = img.header
+
+print(f"Shape:      {data.shape}")
+print(f"Dtype:      {data.dtype}")
+print(f"Voxel size: {header.get_zooms()}")
+$0

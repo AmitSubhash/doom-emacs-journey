@@ -1,0 +1,28 @@
+# name: SLURM GPU job (BigRed200)
+# key: slurm-gpu
+# --
+#!/bin/bash
+#SBATCH --job-name=${1:job_name}
+#SBATCH --account=your-account-id
+#SBATCH --partition=gpu
+#SBATCH --nodes=1
+#SBATCH --gpus-per-node=${2:4}
+#SBATCH --cpus-per-task=${3:8}
+#SBATCH --mem=${4:32G}
+#SBATCH --time=${5:08:00:00}
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+
+set -euo pipefail
+
+module purge
+module load conda         2>/dev/null || module add conda 2>/dev/null
+module load gcc/11.2.0    2>/dev/null || module load gcc  2>/dev/null
+module load cuda/11.8     2>/dev/null || module load cuda 2>/dev/null
+conda activate ${6:env_name}
+
+echo "Job:  $SLURM_JOB_ID"
+echo "Node: $SLURM_NODELIST"
+nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
+
+$0

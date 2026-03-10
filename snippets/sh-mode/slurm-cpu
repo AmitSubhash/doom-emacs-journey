@@ -1,0 +1,26 @@
+# name: SLURM CPU job (BigRed200 general)
+# key: slurm-cpu
+# --
+#!/bin/bash
+#SBATCH --job-name=${1:job_name}
+#SBATCH --account=your-account-id
+#SBATCH --partition=general
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=${2:16}
+#SBATCH --mem=${3:32G}
+#SBATCH --time=${4:04:00:00}
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+
+set -euo pipefail
+
+module purge
+module load conda 2>/dev/null || module add conda 2>/dev/null
+conda activate ${5:env_name}
+
+echo "Job:  $SLURM_JOB_ID"
+echo "Node: $SLURM_NODELIST"
+echo "CPUs: $SLURM_CPUS_PER_TASK"
+
+$0

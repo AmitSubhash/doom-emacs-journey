@@ -1,0 +1,42 @@
+# name: SLURM multi-GPU torchrun DDP (BigRed200)
+# key: slurm-ddp
+# --
+#!/bin/bash
+#SBATCH --job-name=${1:ddp_job}
+#SBATCH --account=your-account-id
+#SBATCH --partition=gpu
+#SBATCH --nodes=${2:2}
+#SBATCH --ntasks-per-node=${3:4}
+#SBATCH --gpus-per-node=${3:4}
+#SBATCH --cpus-per-task=${4:4}
+#SBATCH --mem=${5:64G}
+#SBATCH --time=${6:24:00:00}
+#SBATCH --output=logs/%x_%j.out
+#SBATCH --error=logs/%x_%j.err
+
+set -euo pipefail
+
+module purge
+module load conda         2>/dev/null || module add conda 2>/dev/null
+module load gcc/11.2.0    2>/dev/null || module load gcc  2>/dev/null
+module load cuda/11.8     2>/dev/null || module load cuda 2>/dev/null
+conda activate ${7:env_name}
+
+export NCCL_DEBUG=INFO
+export NCCL_ASYNC_ERROR_HANDLING=1
+export TORCH_DISTRIBUTED_DEBUG=DETAIL
+export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
+export MASTER_PORT=${8:29500}
+
+echo "Job:    $SLURM_JOB_ID"
+echo "Nodes:  $SLURM_JOB_NODELIST"
+echo "Master: $MASTER_ADDR:$MASTER_PORT"
+
+srun --ntasks=$SLURM_NNODES --ntasks-per-node=1 \
+    bash -lc "torchrun \
+        --nnodes=$SLURM_NNODES \
+        --nproc_per_node=$SLURM_NTASKS_PER_NODE \
+        --node_rank=\$SLURM_NODEID \
+        --master_addr=$MASTER_ADDR \
+        --master_port=$MASTER_PORT \
+        ${9:train.py} $0"

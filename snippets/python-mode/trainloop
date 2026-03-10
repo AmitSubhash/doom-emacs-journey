@@ -1,0 +1,47 @@
+# name: PyTorch training loop
+# key: trainloop
+# --
+def train_epoch(
+    model: nn.Module,
+    loader: DataLoader,
+    optimizer: torch.optim.Optimizer,
+    criterion: nn.Module,
+    device: torch.device,
+) -> float:
+    """Run one training epoch.
+
+    Parameters
+    ----------
+    model : nn.Module
+        Model to train (set to train mode internally).
+    loader : DataLoader
+        Training data loader.
+    optimizer : torch.optim.Optimizer
+        Optimizer instance.
+    criterion : nn.Module
+        Loss function.
+    device : torch.device
+        Target device (CPU or CUDA).
+
+    Returns
+    -------
+    float
+        Mean loss across all batches.
+    """
+    model.train()
+    total_loss = 0.0
+
+    for ${1:inputs}, ${2:targets} in loader:
+        ${1:inputs}  = ${1:inputs}.to(device)
+        ${2:targets} = ${2:targets}.to(device)
+
+        optimizer.zero_grad()
+        outputs = model(${1:inputs})
+        loss = criterion(outputs, ${2:targets})
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item()
+
+    return total_loss / len(loader)
+$0

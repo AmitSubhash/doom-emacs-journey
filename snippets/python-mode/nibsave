@@ -1,0 +1,11 @@
+# name: nibabel NIFTI save
+# key: nibsave
+# --
+import nibabel as nib
+import numpy as np
+
+# Assuming data, affine already defined
+img_out = nib.Nifti1Image(${1:data}.astype(np.float32), affine=${2:affine})
+nib.save(img_out, "${3:output.nii.gz}")
+print(f"Saved: ${3:output.nii.gz}  shape={${1:data}.shape}")
+$0

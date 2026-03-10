@@ -12,10 +12,12 @@ custom.el
 *.org
 
 # Environment / secrets
+# OUTLOOK_CALENDAR_ICS_URL must be set in ~/.zshrc, not hardcoded in config.el
 .env
 .envrc
 *.pem
 *.key
+*.ics
 
 # macOS
 .DS_Store

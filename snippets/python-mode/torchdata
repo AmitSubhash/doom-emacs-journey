@@ -1,0 +1,37 @@
+# name: PyTorch Dataset class
+# key: torchdata
+# --
+class ${1:DatasetName}(Dataset):
+    """${2:Description of dataset.}
+
+    Parameters
+    ----------
+    ${3:data_dir} : str | Path
+        ${4:Path to data directory.}
+    transform : callable, optional
+        ${5:Transformations to apply to each sample.}
+    """
+
+    def __init__(
+        self,
+        ${3:data_dir}: str,
+        transform: ${6:None} = None,
+    ) -> None:
+        super().__init__()
+        self.${3:data_dir} = Path(${3:data_dir})
+        self.transform = transform
+        self.samples = self._load_samples()
+
+    def _load_samples(self) -> list:
+        return sorted(self.${3:data_dir}.glob("${7:*.nii.gz}"))
+
+    def __len__(self) -> int:
+        return len(self.samples)
+
+    def __getitem__(self, idx: int) -> ${8:tuple}:
+        sample = self.samples[idx]
+        ${9:# load and process}
+        if self.transform is not None:
+            sample = self.transform(sample)
+        return sample
+$0

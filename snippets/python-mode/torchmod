@@ -1,0 +1,33 @@
+# name: PyTorch nn.Module
+# key: torchmod
+# --
+class ${1:ModelName}(nn.Module):
+    """${2:Description of the model.}
+
+    Parameters
+    ----------
+    ${3:in_channels} : int
+        ${4:Number of input channels.}
+    ${5:out_channels} : int
+        ${6:Number of output channels.}
+    """
+
+    def __init__(self, ${3:in_channels}: int, ${5:out_channels}: int) -> None:
+        super().__init__()
+        self.${7:layer} = ${8:nn.Linear(${3:in_channels}, ${5:out_channels})}
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Shape (${9:batch, channels}).
+
+        Returns
+        -------
+        torch.Tensor
+            Shape (${10:batch, out_channels}).
+        """
+        return self.${7:layer}(x)
+$0

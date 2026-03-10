@@ -5,6 +5,10 @@
 ;; Run `doom sync` after changes, then restart Emacs
 ;;
 
+;; Amit Subahsh added this, I'm doing this to add outlook to this
+;; SO I can directly add tot his
+(package! excorporate)
+
 ;; ── PRODUCTIVITY ────────────────────────
 ;; Auto-save when you idle or switch windows
 (package! super-save)
@@ -34,15 +38,22 @@
 
 
 ;; ── CLAUDE CODE INTEGRATION ─────────────
-;; Option A: Full MCP bridge (more powerful)
-;; Uncomment when ready:
-;; (package! claude-code-ide
-;;   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+;; claude-code-ide: Full MCP bridge with diff panel
+(package! claude-code-ide
+  :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
 
-;; Option B: Simpler Claude Code runner (recommended to start)
+;; claude-code: Simpler Claude Code runner
 (package! claude-code
   :recipe (:host github :repo "stevemolitor/claude-code.el"
-           :files ("*.el" "grpc")))
+                 :files ("*.el" "grpc")))
+
+
+;; ── ORG ROAM UI ─────────────────────────
+;; Visual graph of your linked roam notes in the browser
+;; Launch with: M-x org-roam-ui-mode  (or SPC n g after config below)
+(unpin! org-roam)       ; REQUIRED: org-roam-ui needs bleeding-edge org-roam
+(package! org-roam-ui)
+(package! websocket)    ; WebSocket server that powers the live graph
 
 
 ;; ── AESTHETICS ──────────────────────────

@@ -1,0 +1,31 @@
+# name: argparse + main entrypoint
+# key: argmain
+# --
+import argparse
+
+
+def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments."""
+    parser = argparse.ArgumentParser(description="${1:Script description.}")
+    parser.add_argument(
+        "--${2:input}", type=${3:str}, required=True,
+        help="${4:Input description.}",
+    )
+    parser.add_argument(
+        "--${5:output}", type=${6:str}, default="${7:output}",
+        help="${8:Output path. Default: %(default)s}",
+    )
+    parser.add_argument(
+        "--${9:epochs}", type=${10:int}, default=${11:100},
+        help="${12:Training epochs. Default: %(default)s}",
+    )
+    return parser.parse_args()
+
+
+def main(args: argparse.Namespace) -> None:
+    """Main entry point."""
+    $0
+
+
+if __name__ == "__main__":
+    main(parse_args())

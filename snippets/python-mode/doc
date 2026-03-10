@@ -1,0 +1,21 @@
+# name: Numpy docstring
+# key: doc
+# --
+"""${1:One-line summary.}
+
+Parameters
+----------
+${2:param1} : ${3:type}
+    ${4:Description.}
+
+Returns
+-------
+${5:result} : ${6:type}
+    ${7:Description.}
+
+Examples
+--------
+>>> ${8:function_call()}
+${9:expected_output}
+"""
+$0

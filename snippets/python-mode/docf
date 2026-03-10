@@ -1,0 +1,35 @@
+# name: Numpy docstring (full)
+# key: docf
+# --
+"""${1:One-line summary.}
+
+${2:Extended description.}
+
+Parameters
+----------
+${3:param1} : ${4:np.ndarray}
+    ${5:Shape (N, M). Description.}
+${6:param2} : ${7:type}
+    ${8:Description.}
+
+Returns
+-------
+${9:result} : ${10:np.ndarray}
+    ${11:Shape (N,). Description.}
+
+Raises
+------
+${12:ValueError}
+    ${13:If input shape is invalid.}
+
+Notes
+-----
+${14:Implementation notes or references.}
+
+Examples
+--------
+>>> import numpy as np
+>>> ${15:function_call()}
+${16:expected_output}
+"""
+$0
