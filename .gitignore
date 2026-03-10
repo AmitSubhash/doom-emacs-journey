@@ -1,0 +1,21 @@
+# Compiled Elisp
+*.elc
+*.eln
+
+# Auto-generated customizations (may contain local paths)
+custom.el
+
+# Doom local state
+.local/
+
+# Org files (personal notes, journal, calendar -- keep private)
+*.org
+
+# Environment / secrets
+.env
+.envrc
+*.pem
+*.key
+
+# macOS
+.DS_Store
