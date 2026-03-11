@@ -29,6 +29,10 @@
 ;; Auto-detect and activate virtualenvs
 (package! pet)
 
+;; ── JUPYTER NOTEBOOKS ────────────────────
+;; EIN — edit and run .ipynb inside Emacs
+(package! ein)
+
 
 ;; ── CLAUDE CODE INTEGRATION ─────────────
 ;; claude-code-ide: Full MCP bridge with diff panel

@@ -305,3 +305,69 @@ After changing `config.el`: `SPC :` then `eval-buffer`, or restart Emacs.
 - When in doubt, press `SPC` and explore the menu.
 - Use Claude Code (`SPC o t` then `claude`) when you're stuck on config issues.
 - Don't try to learn everything at once. The muscle memory builds naturally.
+
+---
+
+## 6. Jupyter Notebooks (EIN)
+
+Run and edit `.ipynb` files directly inside Emacs using EIN (Emacs IPython Notebook).
+
+### Prerequisites
+
+Jupyter must be installed (`pip3 install jupyter ipympl`). Already done.
+
+### Starting a Notebook Server
+
+**Option A -- from vterm:**
+```
+SPC o t
+jupyter notebook --no-browser
+```
+Then in Emacs: `SPC :` then `ein:notebooklist-login`, enter `http://localhost:8888`, paste the token from the terminal.
+
+**Option B -- let EIN start it:**
+`SPC :` then `ein:run`, select your Python. EIN launches Jupyter and connects automatically.
+
+### Opening a Notebook
+
+Once connected:
+- `SPC :` then `ein:notebooklist-open` to browse notebooks
+- Or `SPC f f`, navigate to a `.ipynb` file, EIN opens it automatically
+
+### Cell Keybindings (in the notebook buffer)
+
+| Key | Action |
+|---|---|
+| `C-c C-c` | Execute current cell |
+| `C-c C-a` | Insert cell above |
+| `C-c C-b` | Insert cell below |
+| `C-c C-t` | Toggle cell type (code/markdown) |
+| `C-c C-d` | Delete cell |
+| `C-c C-n` | Move to next cell |
+| `C-c C-p` | Move to previous cell |
+| `C-c C-k` | Interrupt kernel |
+| `C-c C-r` | Restart kernel |
+| `C-c C-l` | Clear cell output |
+| `C-c C-s` | Save notebook |
+| `C-c C-#` | Split cell at point |
+
+### Inline Plots
+
+Plots render inline automatically (configured with `ein:output-area-inlined-images t` in config.el). For interactive 3D plots in the browser, use `%matplotlib widget` at the top of the notebook.
+
+### Workflow
+
+1. `SPC :` -> `ein:run` (starts Jupyter server)
+2. `SPC :` -> `ein:notebooklist-open` (browse notebooks)
+3. Navigate to cell, edit, `C-c C-c` to run
+4. `C-c C-s` to save
+5. `SPC :` -> `ein:stop` to shut down the server when done
+
+### Troubleshooting
+
+| Problem | Solution |
+|---|---|
+| Can't connect | Check Jupyter is running: `jupyter notebook list` in vterm |
+| No plots | Make sure `%matplotlib inline` is in first cell |
+| Wrong Python | `SPC :` then `ein:run` and select correct interpreter |
+| Kernel died | `C-c C-r` to restart kernel |

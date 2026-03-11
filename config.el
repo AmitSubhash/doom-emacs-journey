@@ -130,6 +130,16 @@
 
 
 ;; ─────────────────────────────────────────
+;; EIN — Jupyter notebooks inside Emacs
+;; ─────────────────────────────────────────
+(use-package! ein
+  :defer t
+  :config
+  (setq ein:output-area-inlined-images t    ; show plots inline
+        ein:worksheet-enable-undo t))       ; undo support in cells
+
+
+;; ─────────────────────────────────────────
 ;; MAGIT — git interface
 ;; SPC g g to open in current project
 ;; ─────────────────────────────────────────
