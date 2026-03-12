@@ -8,8 +8,17 @@
 ;; IDENTITY
 ;; ─────────────────────────────────────────
 (setq user-full-name "Amit Subhash"
-      user-mail-address "your@email.com")  ; update this
+      user-mail-address "atsubhas@iu.edu")  ; update this
 
+
+;; Adding my own things gang, unbeatable subhash
+(defun my/sync-outlook-calendar ()
+  "Fetch Outlook calendar and import to org."
+  (interactive)
+  (let ((ics-url "https://outlook.office365.com/owa/calendar/327e687f565744b3999921de83a1d004@iu.edu/0fa2ed99db8241618e6c78cd60194f492801671430916713698/calendar.ics"))
+    (shell-command
+     (format "curl -s '%s'  | ical2orgpy - ~/org/outlook-cal.org" ics-url))
+    (message "Outlook calendar synced!")))
 
 ;; ─────────────────────────────────────────
 ;; APPEARANCE
@@ -58,8 +67,8 @@
            "* %? :note:\n  %U")
           ("r" "Research idea" entry (file+headline "~/org/research.org" "Ideas")
            "* %? :research:\n  %U\n  Source: %a")
-          ("j" "Journal" entry (function org-journal-new-entry)
-           "* %?\n  %U")))
+          ("j" "Journal" entry (file+datetree "~/org/journal.org")
+           "* %U %?\n  %i")))
 
   ;; Agenda — your daily command center
   ;; SPC o a a to open
@@ -72,22 +81,69 @@
         org-ellipsis " ▾ "
         org-startup-indented t))
 
+
 ;; ─────────────────────────────────────────
-;; ORG AGENDA KEYBINDINGS
+;; APPOINTMENT REMINDERS + macOS NOTIFICATIONS
+;; Org agenda items with timestamps trigger desktop alerts.
 ;; ─────────────────────────────────────────
-;; Use Emacs state in org-agenda so native keybindings (f, b, d, w, etc.) work.
-;; evil-set-initial-state is the reliable way — it runs BEFORE evil-org-agenda
-;; can override the state, unlike add-hook which gets clobbered.
-(after! evil
-  (evil-set-initial-state 'org-agenda-mode 'emacs))
+(after! org
+  (appt-activate 1)
+  (setq appt-message-warning-time 15
+        appt-display-interval 5
+        appt-display-format 'window)
+
+  ;; Rebuild appointment list whenever you open agenda
+  (add-hook 'org-agenda-finalize-hook #'org-agenda-to-appt)
+
+  ;; Also rebuild hourly + once at startup (after org loads)
+  (run-at-time "5 sec" 3600 #'org-agenda-to-appt))
+
+;; macOS native notifications via alert.el
+(use-package! alert
+  :config
+  (setq alert-default-style 'osx-notifier)
+
+  (defun my/appt-display (min-to-appt _new-time msg)
+    "Send macOS notification for appointments."
+    (alert (format "%s" msg)
+           :title (format "Reminder in %s min" min-to-appt)
+           :severity 'high))
+
+  (setq appt-disp-window-function #'my/appt-display
+        appt-delete-window-function (lambda () t)))
 
 
 ;; ─────────────────────────────────────────
-;; ORG JOURNAL — use .org extension so agenda can find TODOs
+;; SCHEDULED NOTIFICATIONS (no email needed)
+;; M-x my/remind-me  -- schedule a macOS notification
+;; Works while Emacs is running; use cron for persistent.
 ;; ─────────────────────────────────────────
-(after! org-journal
-  (setq org-journal-file-format "%Y%m%d.org"
-        org-journal-dir "~/org/journal/"))
+(defun my/send-notification (title body)
+  "Fire a macOS notification with sound."
+  (start-process "reminder" nil "osascript"
+                 "-e" (format "display notification %S with title %S sound name \"Glass\""
+                              body title)))
+
+(defun my/schedule-reminder (datetime title body)
+  "Schedule a macOS notification at DATETIME (e.g. \"March 12, 2026 6:00pm\").
+Only fires while Emacs is running."
+  (let* ((target-time (date-to-time datetime))
+         (delay-seconds (float-time (time-subtract target-time (current-time)))))
+    (if (> delay-seconds 0)
+        (progn
+          (run-at-time delay-seconds nil #'my/send-notification title body)
+          (message "Reminder scheduled for %s (in %.0f minutes)"
+                   datetime (/ delay-seconds 60.0)))
+      (message "Error: That time is in the past!"))))
+
+(defun my/remind-me (datetime title body)
+  "Quick self-reminder via macOS notification.  M-x my/remind-me"
+  (interactive
+   (list
+    (read-string "When? (e.g. March 15, 2026 9:00am): ")
+    (read-string "Title: ")
+    (read-string "Body: ")))
+  (my/schedule-reminder datetime title body))
 
 
 ;; ─────────────────────────────────────────
@@ -100,21 +156,118 @@
   (setq org-roam-directory "~/org/roam/"
         org-roam-dailies-directory "daily/"))
 
+
+;; ─────────────────────────────────────────
+;; ORG ROAM UI — interactive graph of linked notes
+;; SPC n g  to open/toggle the graph in xwidget browser (embedded, no external app)
+;; Double-click a node in the graph to jump to that note.
+;; ─────────────────────────────────────────
+(use-package! websocket
+  :after org-roam)
+
 (use-package! org-roam-ui
   :after org-roam
   :config
-  (setq org-roam-ui-sync-theme t
-        org-roam-ui-follow t
-        org-roam-ui-update-on-save t
-        org-roam-ui-open-on-start nil))
+  (setq org-roam-ui-sync-theme       t
+        org-roam-ui-follow           t
+        org-roam-ui-update-on-save   t
+        org-roam-ui-open-on-start    nil
+        org-roam-ui-browser-function #'xwidget-webkit-browse-url))
 
-;; Bind SPC n g -> org-roam-ui-open.
-;; Must be outside use-package! :config because that block is deferred
-;; until org-roam loads (lazy). The flat "n g" path adds to Doom's
-;; existing SPC n prefix instead of redefining it.
-(after! org-roam-ui
+;; Keybinding registered at startup, not lazily with the package.
+;; org-roam-ui-open is autoloaded so it triggers package loading on first use.
+(map! :leader
+      (:prefix ("n" . "notes")
+       :desc "Roam graph" "g" #'org-roam-ui-open))
+
+
+;; ─────────────────────────────────────────
+;; ORG TREE SLIDE — presentations from org files
+;; Already installed via +present in init.el, just needs configuration.
+;; F8 to start/stop. F9/F10 to navigate slides.
+;; Each top-level * heading = one slide.
+;; ─────────────────────────────────────────
+(after! org-tree-slide
+  (org-tree-slide-presentation-profile)
+
+  (map! :map org-tree-slide-mode-map
+        "<f8>"  #'org-tree-slide-mode
+        "<f9>"  #'org-tree-slide-move-previous-tree
+        "<f10>" #'org-tree-slide-move-next-tree)
+
+  (setq org-tree-slide-header t            ; show #+title and #+author at top
+        org-tree-slide-breadcrumbs " > "   ; section breadcrumb separator
+        org-tree-slide-activate-message   "Presentation mode ON"
+        org-tree-slide-deactivate-message "Presentation mode OFF")
+
+  ;; Entering presentation: enlarge text, show images, lock editing
+  (add-hook 'org-tree-slide-play-hook
+            (lambda ()
+              (text-scale-increase 2)
+              (org-display-inline-images)
+              (read-only-mode +1)))
+
+  ;; Leaving presentation: restore everything
+  (add-hook 'org-tree-slide-stop-hook
+            (lambda ()
+              (text-scale-increase 0)
+              (org-remove-inline-images)
+              (read-only-mode -1))))
+
+
+;; ─────────────────────────────────────────
+;; PATH / EXEC-PATH FIX (macOS GUI Emacs)
+;; EMACS_PLUS_NO_PATH_INJECTION=1 is baked into the doom binary and
+;; .local/env, preventing the shell PATH from reaching exec-path.
+;; This means lsp-mode cannot find npm/node to install pyright.
+;; Fix: sync PATH explicitly at startup via exec-path-from-shell.
+;; ─────────────────────────────────────────
+(when IS-MAC
+  (after! exec-path-from-shell
+    (dolist (var '("PATH" "MANPATH" "NVM_DIR" "PYENV_ROOT" "CONDA_PREFIX"))
+      (exec-path-from-shell-copy-env var))
+    (exec-path-from-shell-initialize))
+  ;; Belt-and-suspenders: hard-code Homebrew paths in case the above
+  ;; runs after lsp-mode first tries to find npm.
+  (dolist (path '("/opt/homebrew/bin" "/opt/homebrew/sbin" "/usr/local/bin"))
+    (add-to-list 'exec-path path t)))
+
+
+;; ─────────────────────────────────────────
+;; LSP / PYRIGHT
+;; ─────────────────────────────────────────
+(after! lsp-mode
+  (setq lsp-log-io nil
+        lsp-enable-symbol-highlighting t))
+
+(after! lsp-ui
+  (setq lsp-ui-doc-enable t          ; K shows inline doc popup
+        lsp-ui-doc-show-with-cursor t
+        lsp-ui-doc-position 'at-point
+        lsp-ui-doc-delay 0.2
+        lsp-ui-sideline-enable nil)) ; sideline is noisy, disable it
+
+
+;; ─────────────────────────────────────────
+;; BROWSER — xwidget-webkit
+;; Full Chromium-based renderer, compiled into this Emacs build.
+;; Replaces opening external browser for K docs, org links, etc.
+;; Keybindings (inside xwidget buffer):
+;;   g = go to URL   r = reload   b = back   f = forward   q = quit
+;; SPC o w  = open URL in embedded browser
+;; SPC o W  = open URL in Safari/external (fallback)
+;; ─────────────────────────────────────────
+(when (featurep 'xwidget-internal)
+  (setq browse-url-browser-function #'xwidget-webkit-browse-url
+        browse-url-secondary-browser-function #'browse-url-default-macosx-browser)
+
   (map! :leader
-        :desc "Roam UI graph" "n g" #'org-roam-ui-open))
+        (:prefix ("o" . "open")
+         :desc "Browser (xwidget)" "w" #'xwidget-webkit-browse-url
+         :desc "Browser (Safari)"  "W" #'browse-url-default-macosx-browser))
+
+  (after! xwidget
+    (setq xwidget-webkit-enable-plugins nil))) ; keep it stable, no plugins
 
 
 ;; ─────────────────────────────────────────
@@ -127,16 +280,6 @@
 (use-package! pet
   :config
   (add-hook 'python-base-mode-hook 'pet-mode -10))
-
-
-;; ─────────────────────────────────────────
-;; EIN — Jupyter notebooks inside Emacs
-;; ─────────────────────────────────────────
-(use-package! ein
-  :defer t
-  :config
-  (setq ein:output-area-inlined-images t    ; show plots inline
-        ein:worksheet-enable-undo t))       ; undo support in cells
 
 
 ;; ─────────────────────────────────────────
@@ -183,9 +326,27 @@
 ;; CLAUDE CODE IDE — bidirectional MCP bridge
 ;; C-c C-' to open menu
 ;; ─────────────────────────────────────────
+;; Prevent CLAUDECODE env var from blocking Claude Code in Emacs
+;; Layer 1: never capture it in doom's env file
+(after! doom-cli-env
+  (add-to-list 'doom-env-deny "^CLAUDECODE$"))
+;; Layer 2: always unset it at runtime (belt + suspenders)
+(setenv "CLAUDECODE" nil)
+
 (use-package! claude-code-ide
-  :bind ("C-c C-'" . claude-code-ide-menu)
+  :bind (("C-c C-'" . claude-code-ide-menu)        ; transient menu
+         ("C-c c c" . claude-code-ide)              ; start/toggle session
+         ("C-c c r" . claude-code-ide-resume)       ; resume previous conversation
+         ("C-c c k" . claude-code-ide-continue)     ; continue most recent
+         ("C-c c p" . claude-code-ide-send-prompt)  ; send prompt from minibuffer
+         ("C-c c s" . claude-code-ide-list-sessions) ; switch sessions
+         ("C-c c t" . claude-code-ide-toggle)       ; toggle window visibility
+         ("C-c c @" . claude-code-ide-insert-at-mentioned)) ; send selection
   :config
+  ;; Claude window on the right, 100 columns wide
+  (setq claude-code-ide-window-side 'right
+        claude-code-ide-window-width 100)
+  ;; Enable Emacs MCP tools (xref, treesitter, imenu, project info)
   (claude-code-ide-emacs-tools-setup))
 
 ;; Confirm quit — prevents accidental closes
@@ -194,3 +355,80 @@
 ;; Scroll more like a normal editor
 (setq scroll-margin 5
       scroll-conservatively 101)
+
+
+;; ─────────────────────────────────────────
+;; GOOD-SCROLL — smooth pixel-level scrolling
+;; ─────────────────────────────────────────
+(use-package! good-scroll
+  :config
+  (good-scroll-mode 1))
+
+
+;; ─────────────────────────────────────────
+;; ORG-SUPERSTAR — prettier org bullets and list markers
+;; Replaces the default * heading stars with unicode symbols
+;; ─────────────────────────────────────────
+(use-package! org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :config
+  (setq org-superstar-headline-bullets-list '("◉" "○" "✸" "✿" "✤")
+        org-superstar-item-bullet-alist    '((?* . ?•) (?+ . ?➤) (?- . ?–))
+        org-superstar-special-todo-items  t))
+
+
+;; ─────────────────────────────────────────
+;; OLIVETTI — distraction-free centered writing
+;; SPC t o to toggle; pairs well with zen mode (SPC t z)
+;; ─────────────────────────────────────────
+(use-package! olivetti
+  :config
+  (setq olivetti-body-width 90
+        olivetti-minimum-body-width 72
+        olivetti-recall-visual-line-mode-entry-state t)
+  (map! :leader
+        (:prefix ("t" . "toggle")
+         :desc "Olivetti (centered)" "o" #'olivetti-mode)))
+
+
+;; ─────────────────────────────────────────
+;; NERD-ICONS — icons in dired, modeline, etc.
+;; First time: run M-x nerd-icons-install-fonts
+;; ─────────────────────────────────────────
+(use-package! nerd-icons
+  :when (display-graphic-p))
+
+(use-package! nerd-icons-dired
+  :after nerd-icons
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+
+;; ─────────────────────────────────────────
+;; CITAR — citation management (Zotero / BibTeX)
+;; SPC n b b  insert citation in org
+;; SPC n b o  open paper PDF/URL
+;; SPC n b n  open/create notes for entry
+;; Keep your .bib at ~/org/references.bib (Zotero Better BibTeX export target)
+;; ─────────────────────────────────────────
+(use-package! citar
+  :after org
+  :custom
+  (citar-bibliography  '("~/org/references.bib"))
+  (citar-notes-paths   '("~/org/roam/"))
+  (citar-library-paths '("~/Documents/papers/"))
+  :config
+  (map! :leader
+        (:prefix ("n" . "notes")
+         :desc "Insert citation"   "b b" #'citar-insert-citation
+         :desc "Open reference"    "b o" #'citar-open
+         :desc "Open notes"        "b n" #'citar-open-notes
+         :desc "Open bibliography" "b B" #'citar-open-entry)))
+
+(use-package! citar-org-roam
+  :after (citar org-roam)
+  :config
+  (citar-org-roam-mode 1)
+  (setq citar-org-roam-note-title-template "${author} (${year}) - ${title}"))
+
+
