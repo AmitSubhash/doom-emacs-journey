@@ -3,7 +3,7 @@
 # --
 #!/bin/bash
 #SBATCH --job-name=${1:job_name}
-#SBATCH --account=your-account-id
+#SBATCH --account=r00602
 #SBATCH --partition=general
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1

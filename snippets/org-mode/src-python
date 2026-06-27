@@ -1,0 +1,7 @@
+# name: Python source block
+# key: src-python
+# --
+#+begin_src python :results output
+${1:# code here}
+$0
+#+end_src

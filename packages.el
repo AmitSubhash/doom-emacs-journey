@@ -5,8 +5,7 @@
 ;; Run `doom sync` after changes, then restart Emacs
 ;;
 
-;; Amit Subahsh added this, I'm doing this to add outlook to this
-;; SO I can directly add tot his
+;; Outlook calendar sync (requires ical2orgpy CLI)
 (package! excorporate)
 
 ;; ── PRODUCTIVITY ────────────────────────
@@ -22,18 +21,29 @@
 ;; Better looking org mode bullets and headers
 (package! org-superstar)
 
-;; Pomodoro timer integrated with org
-(package! org-pomodoro)
+;; Modern org rendering: TODO pills, table polish, fold markers (the biggest
+;; visual upgrade. Works alongside org-superstar, doesn't replace it.)
+(package! org-modern)
 
+;; Group agenda entries by project / priority / tag instead of one flat list.
+;; Single most useful package for making the agenda feel intuitive.
+(package! org-super-agenda)
+
+;; Kanban board view rendered inline in any org file from TODO states.
+(package! org-kanban)
+
+;; org-pomodoro: already provided by Doom's +pomodoro flag in init.el
+;; org-noter:    already provided by Doom's +noter flag in init.el
 
 ;; ── RESEARCH / NOTES ────────────────────
 ;; Citation management — works with Zotero/BibTeX
 (package! citar)
 (package! citar-org-roam)
 
-;; PDF annotation that links back to org notes
-(package! org-noter)
 
+;; ── macOS PATH FIX ────────────────────
+;; GUI Emacs doesn't inherit shell PATH
+(package! exec-path-from-shell)
 
 ;; ── PYTHON ──────────────────────────────
 ;; Auto-detect and activate virtualenvs
@@ -56,11 +66,25 @@
 ;; ── AESTHETICS ──────────────────────────
 ;; Nerd icons for file tree and modeline
 (package! nerd-icons)
-(package! nerd-icons-dired)
 
-;; Smooth scrolling
-(package! good-scroll)
+;; Solaire-mode: subtly differentiate "real" file buffers from popups/sidebars
+(package! solaire-mode)
 
+;; Themes — added to rotation (SPC t T)
+(package! ef-themes)
+(package! catppuccin-theme)
+
+;; Subtle vertical indent guides in code buffers
+(package! highlight-indent-guides)
+
+;; ── AI-NATIVE EDITING ───────────────────
+;; minuet-ai: Cursor-style tab completion powered by Claude (FIM)
+(package! minuet
+  :recipe (:host github :repo "milanglacier/minuet-ai.el"))
+
+;; aidermacs: multi-file agent edits with ediff diff review (optional companion to claude-code-ide)
+(package! aidermacs
+  :recipe (:host github :repo "MatthewZMD/aidermacs"))
 
 ;; ── ORG ROAM UI ─────────────────────────
 ;; Visual graph of linked roam notes — opens in xwidget browser
@@ -73,3 +97,24 @@
            :local-repo "simple-httpd"))
 (package! websocket)
 (package! org-roam-ui)
+
+
+;; ── COLLABORATOR: AGENTIC WORKSPACE ──────
+;; mcp.el: MCP client (connect Emacs TO external MCP servers)
+(package! mcp
+  :recipe (:host github :repo "lizqwerscott/mcp.el"
+           :files ("*.el")))
+
+;; eat: fast pure-elisp terminal emulator for agent output
+(package! eat
+  :recipe (:host codeberg :repo "akib/emacs-eat"
+           :files ("*.el" ("term" "term/*.el") "*.texi"
+                   "*.ti" ("e" "e/*")
+                   ("integration" "integration/*"))))
+
+;; agent-shell + acp.el: run CLI agents via Agent Client Protocol
+(package! shell-maker)
+(package! acp
+  :recipe (:host github :repo "xenodium/acp.el"))
+(package! agent-shell
+  :recipe (:host github :repo "xenodium/agent-shell"))

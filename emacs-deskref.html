@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emacs Desk Reference</title>
+<style>
+  @page { size: Letter portrait; margin: 8mm 7mm 6mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: #23242b;
+         font-size: 7.3pt; line-height: 1.22; margin: 0; }
+
+  .head { display: flex; align-items: flex-end; justify-content: space-between;
+          border-bottom: 2.5px solid #3d4256; padding-bottom: 4px; margin-bottom: 6px; }
+  .head h1 { font-size: 15.5pt; margin: 0; color: #2a2d3a; letter-spacing: -.02em; font-weight: 800; white-space: nowrap; }
+  .head .meta { font-size: 7pt; color: #8b8ea2; text-align: right; line-height: 1.35; }
+  .head .meta b { color: #5a47a3; }
+  .sub { font-size: 7.2pt; color: #61647a; margin: -2px 0 7px; }
+  .sub kbd { font-size: 6.4pt; }
+
+  .flow { font-size: 7pt; background: #f4f5f9; border: 1px solid #e0e2ec; border-radius: 5px;
+          padding: 4px 9px; margin-bottom: 7px; color: #3a3c49; }
+  .flow b { color: #5a47a3; text-transform: uppercase; letter-spacing: .04em; font-size: 6.6pt; }
+  .flow .ar { color: #adb0c1; padding: 0 3px; font-weight: 700; }
+
+  .cols { column-count: 3; column-gap: 7px; }
+  .card { break-inside: avoid; margin: 0 0 6px; border: 1px solid #e4e5ee; border-radius: 6px;
+          overflow: hidden; background: #fff; }
+  .card > h2 { font-size: 6.7pt; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+               color: #fff; padding: 3px 8px; margin: 0; }
+  .card > h2 .n { float: right; font-weight: 600; opacity: .8; letter-spacing: .01em; text-transform: none; }
+  .base > h2 { background: #3d4256; }
+  .code > h2 { background: #2f5496; }
+  .ai   > h2 { background: #5a47a3; }
+  .plan > h2 { background: #2c7a66; }
+  .git  > h2 { background: #9a445a; }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 1.9px 6px; vertical-align: baseline; }
+  tr:nth-child(even) { background: #f6f7fb; }
+  td.k { white-space: nowrap; width: 1%; }
+  td.d { color: #34353f; }
+  td.d b { color: #1d1e25; }
+  kbd { font-family: "SF Mono", Menlo, "DejaVu Sans Mono", monospace; font-size: 6.3pt;
+        background: #eaecf2; border: 1px solid #cbcedb; border-radius: 3px; padding: .5px 4px;
+        color: #2c3656; white-space: nowrap; }
+  .card td.k kbd { font-size: 6.5pt; }
+  td.d kbd { font-size: 6.1pt; background: #eef0f5; }
+
+  .legend { margin-top: 6px; padding-top: 5px; border-top: 1px solid #e4e5ee; font-size: 6.8pt;
+            color: #75788c; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .legend .lg { display: inline-flex; align-items: center; gap: 5px; }
+  .legend .sw { width: 9px; height: 9px; border-radius: 2px; display: inline-block; }
+  .legend .tip { margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="head">
+  <h1>Emacs Desk Reference</h1>
+  <div class="meta">Doom Emacs &middot; evil (vim) &middot; Claude<br><b>amit</b> &middot; config.el</div>
+</div>
+<div class="sub">Lost? Press <kbd>SPC</kbd> and wait to reveal any menu, or <kbd>SPC h b b</kbd> to search every binding live.</div>
+
+<div class="flow">
+  <b>Daily loop</b> &nbsp; journal <kbd>SPC n j j</kbd><span class="ar">&rarr;</span>plan <kbd>SPC o a a</kbd><span class="ar">&rarr;</span>open project <kbd>SPC p p</kbd><span class="ar">&rarr;</span>code <kbd>gd</kbd> <kbd>K</kbd> + <kbd>TAB</kbd> accept AI<span class="ar">&rarr;</span>ask Claude <kbd>SPC l e</kbd> / agent <kbd>C-c c c</kbd><span class="ar">&rarr;</span>run <kbd>SPC d d</kbd><span class="ar">&rarr;</span>commit <kbd>SPC g g</kbd> + <kbd>C-c i</kbd>
+</div>
+
+<div class="cols">
+
+  <div class="card base">
+    <h2>Discover &amp; Survive</h2>
+    <table>
+      <tr><td class="k"><kbd>SPC</kbd></td><td class="d">wait &rarr; which-key shows all</td></tr>
+      <tr><td class="k"><kbd>SPC h k</kbd></td><td class="d">describe a key</td></tr>
+      <tr><td class="k"><kbd>SPC h f</kbd></td><td class="d">describe a function</td></tr>
+      <tr><td class="k"><kbd>SPC h b b</kbd></td><td class="d">search all bindings</td></tr>
+      <tr><td class="k"><kbd>SPC h r r</kbd></td><td class="d">reload config</td></tr>
+      <tr><td class="k"><kbd>C-z</kbd></td><td class="d"><b>toggle vim / emacs state</b></td></tr>
+      <tr><td class="k"><kbd>SPC q q</kbd></td><td class="d">quit Emacs</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Modes <span class="n">evil</span></h2>
+    <table>
+      <tr><td class="k"><kbd>i</kbd> <kbd>a</kbd></td><td class="d">insert before / after cursor</td></tr>
+      <tr><td class="k"><kbd>o</kbd> <kbd>O</kbd></td><td class="d">open line below / above</td></tr>
+      <tr><td class="k"><kbd>I</kbd> <kbd>A</kbd></td><td class="d">insert at line start / end</td></tr>
+      <tr><td class="k"><kbd>ESC</kbd></td><td class="d">back to normal mode</td></tr>
+      <tr><td class="k"><kbd>v</kbd> <kbd>V</kbd> <kbd>C-v</kbd></td><td class="d">visual char / line / block</td></tr>
+      <tr><td class="k"><kbd>u</kbd> <kbd>C-r</kbd></td><td class="d">undo / redo</td></tr>
+      <tr><td class="k"><kbd>.</kbd></td><td class="d">repeat last change</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Move</h2>
+    <table>
+      <tr><td class="k"><kbd>h j k l</kbd></td><td class="d">left down up right</td></tr>
+      <tr><td class="k"><kbd>w b e</kbd></td><td class="d">word fwd / back / end</td></tr>
+      <tr><td class="k"><kbd>0 ^ $</kbd></td><td class="d">line start / first / end</td></tr>
+      <tr><td class="k"><kbd>gg G</kbd></td><td class="d">buffer top / bottom</td></tr>
+      <tr><td class="k"><kbd>C-d C-u</kbd></td><td class="d">half page down / up</td></tr>
+      <tr><td class="k"><kbd>{ }</kbd></td><td class="d">prev / next paragraph</td></tr>
+      <tr><td class="k"><kbd>5 k</kbd></td><td class="d">jump N lines (relative #s)</td></tr>
+      <tr><td class="k"><kbd>/ n N</kbd></td><td class="d">search / next / prev</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Edit</h2>
+    <table>
+      <tr><td class="k"><kbd>x</kbd></td><td class="d">delete char</td></tr>
+      <tr><td class="k"><kbd>dd yy p</kbd></td><td class="d">cut line / yank / paste</td></tr>
+      <tr><td class="k"><kbd>ciw diw</kbd></td><td class="d">change / delete inner word</td></tr>
+      <tr><td class="k"><kbd>cw dw</kbd></td><td class="d">change / delete to word end</td></tr>
+      <tr><td class="k"><kbd>&gt;&gt; &lt;&lt;</kbd></td><td class="d">indent / dedent</td></tr>
+      <tr><td class="k"><kbd>gc</kbd></td><td class="d">comment (motion or <kbd>gcc</kbd> line)</td></tr>
+      <tr><td class="k"><kbd>r</kbd> <kbd>J</kbd></td><td class="d">replace char / join lines</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Files &amp; Buffers</h2>
+    <table>
+      <tr><td class="k"><kbd>SPC .</kbd></td><td class="d">find file (here)</td></tr>
+      <tr><td class="k"><kbd>SPC f r</kbd></td><td class="d">recent files</td></tr>
+      <tr><td class="k"><kbd>SPC f s</kbd></td><td class="d">save</td></tr>
+      <tr><td class="k"><kbd>SPC f P</kbd></td><td class="d">open Doom config</td></tr>
+      <tr><td class="k"><kbd>SPC b b</kbd></td><td class="d">switch buffer</td></tr>
+      <tr><td class="k"><kbd>SPC b d</kbd></td><td class="d">kill buffer</td></tr>
+      <tr><td class="k"><kbd>SPC b n / p</kbd></td><td class="d">next / prev buffer</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Project &amp; Search</h2>
+    <table>
+      <tr><td class="k"><kbd>SPC p p</kbd></td><td class="d">switch project</td></tr>
+      <tr><td class="k"><kbd>SPC p f</kbd></td><td class="d">find file in project</td></tr>
+      <tr><td class="k"><kbd>SPC /</kbd></td><td class="d">search project (ripgrep)</td></tr>
+      <tr><td class="k"><kbd>C-c s l</kbd></td><td class="d">search lines in buffer</td></tr>
+      <tr><td class="k"><kbd>C-c s p</kbd></td><td class="d">ripgrep</td></tr>
+      <tr><td class="k"><kbd>C-c s b</kbd></td><td class="d">switch buffer (consult)</td></tr>
+      <tr><td class="k"><kbd>SPC s i</kbd></td><td class="d">symbols in file (imenu)</td></tr>
+      <tr><td class="k"><kbd>C-c .</kbd></td><td class="d">embark act on thing at point</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Windows &amp; Workspaces</h2>
+    <table>
+      <tr><td class="k"><kbd>SPC w v / s</kbd></td><td class="d">split right / below</td></tr>
+      <tr><td class="k"><kbd>SPC w c</kbd></td><td class="d">close window</td></tr>
+      <tr><td class="k"><kbd>C-w hjkl</kbd></td><td class="d">move between windows</td></tr>
+      <tr><td class="k"><kbd>SPC w o</kbd></td><td class="d">maximize this window</td></tr>
+      <tr><td class="k"><kbd>SPC w =</kbd></td><td class="d">balance windows</td></tr>
+      <tr><td class="k"><kbd>SPC TAB n</kbd></td><td class="d">new workspace</td></tr>
+      <tr><td class="k"><kbd>SPC TAB ] [</kbd></td><td class="d">next / prev workspace</td></tr>
+      <tr><td class="k"><kbd>SPC TAB r d</kbd></td><td class="d">rename / delete workspace</td></tr>
+    </table>
+  </div>
+
+  <div class="card code">
+    <h2>Code &amp; LSP</h2>
+    <table>
+      <tr><td class="k"><kbd>g d</kbd></td><td class="d">jump to definition</td></tr>
+      <tr><td class="k"><kbd>g r</kbd></td><td class="d">find references</td></tr>
+      <tr><td class="k"><kbd>K</kbd></td><td class="d">hover docs at point</td></tr>
+      <tr><td class="k"><kbd>SPC c r</kbd></td><td class="d">rename symbol</td></tr>
+      <tr><td class="k"><kbd>SPC c f</kbd></td><td class="d">format buffer</td></tr>
+      <tr><td class="k"><kbd>SPC c I e</kbd></td><td class="d">list all errors</td></tr>
+      <tr><td class="k"><kbd>] e / [ e</kbd></td><td class="d">next / prev error</td></tr>
+      <tr><td class="k"><kbd>SPC c I h</kbd></td><td class="d">who calls this (hierarchy)</td></tr>
+      <tr><td class="k"><kbd>SPC c I T</kbd></td><td class="d">git time machine</td></tr>
+    </table>
+  </div>
+
+  <div class="card code">
+    <h2>Debug <span class="n">SPC d</span></h2>
+    <table>
+      <tr><td class="k"><kbd>SPC d d</kbd></td><td class="d">debug this file</td></tr>
+      <tr><td class="k"><kbd>SPC d b</kbd></td><td class="d">toggle breakpoint</td></tr>
+      <tr><td class="k"><kbd>SPC d n / i / o</kbd></td><td class="d">step over / in / out</td></tr>
+      <tr><td class="k"><kbd>SPC d c</kbd></td><td class="d">continue</td></tr>
+      <tr><td class="k"><kbd>SPC d e</kbd></td><td class="d">eval at point</td></tr>
+      <tr><td class="k"><kbd>SPC d u l</kbd></td><td class="d">show locals (<kbd>u r</kbd> repl)</td></tr>
+      <tr><td class="k"><kbd>SPC d x / r</kbd></td><td class="d">stop / restart</td></tr>
+    </table>
+  </div>
+
+  <div class="card ai">
+    <h2>AI inline <span class="n">SPC l</span></h2>
+    <table>
+      <tr><td class="k"><kbd>SPC l e</kbd></td><td class="d">explain selection</td></tr>
+      <tr><td class="k"><kbd>SPC l k</kbd></td><td class="d">rewrite w/ prompt (Cmd+K)</td></tr>
+      <tr><td class="k"><kbd>SPC l r / f</kbd></td><td class="d">refactor / fix bugs</td></tr>
+      <tr><td class="k"><kbd>SPC l o / d</kbd></td><td class="d">optimize / docstrings</td></tr>
+      <tr><td class="k"><kbd>SPC l y / t</kbd></td><td class="d">type hints / write tests</td></tr>
+      <tr><td class="k"><kbd>SPC l c</kbd></td><td class="d">chat (gptel)</td></tr>
+      <tr><td class="k"><kbd>TAB</kbd></td><td class="d"><b>accept ghost text</b> typing</td></tr>
+      <tr><td class="k"><kbd>C-TAB</kbd></td><td class="d">accept line (<kbd>M-n</kbd> cycle)</td></tr>
+    </table>
+  </div>
+
+  <div class="card ai">
+    <h2>Talk to Claude</h2>
+    <table>
+      <tr><td class="k"><kbd>C-c c c</kbd></td><td class="d">start / toggle session</td></tr>
+      <tr><td class="k"><kbd>C-c C-'</kbd></td><td class="d">Claude Code menu</td></tr>
+      <tr><td class="k"><kbd>C-c c p</kbd></td><td class="d">send a prompt</td></tr>
+      <tr><td class="k"><kbd>C-c c @</kbd></td><td class="d">insert @file mention</td></tr>
+      <tr><td class="k"><kbd>C-c c r / k</kbd></td><td class="d">resume / continue</td></tr>
+      <tr><td class="k"><kbd>C-c c s</kbd></td><td class="d">list / switch sessions</td></tr>
+      <tr><td class="k"><kbd>C-c c n</kbd></td><td class="d">new named instance</td></tr>
+      <tr><td class="k"><kbd>C-c c a</kbd></td><td class="d">usage / analytics</td></tr>
+    </table>
+  </div>
+
+  <div class="card plan">
+    <h2>Plan &amp; Org <span class="n">org</span></h2>
+    <table>
+      <tr><td class="k"><kbd>SPC X</kbd></td><td class="d">capture (t n r j p)</td></tr>
+      <tr><td class="k"><kbd>SPC X j</kbd></td><td class="d">journal capture</td></tr>
+      <tr><td class="k"><kbd>SPC o a a</kbd></td><td class="d">agenda (<kbd>o a d</kbd> dashboard)</td></tr>
+      <tr><td class="k"><kbd>TAB</kbd></td><td class="d">fold / unfold heading</td></tr>
+      <tr><td class="k"><kbd>M-RET</kbd></td><td class="d">new heading / item</td></tr>
+      <tr><td class="k"><kbd>SPC m t</kbd></td><td class="d">cycle TODO state</td></tr>
+      <tr><td class="k"><kbd>SPC m d / s</kbd></td><td class="d">deadline / schedule</td></tr>
+      <tr><td class="k"><kbd>SPC m r</kbd></td><td class="d">refile to project</td></tr>
+    </table>
+  </div>
+
+  <div class="card plan">
+    <h2>Journal &amp; Notes</h2>
+    <table>
+      <tr><td class="k"><kbd>SPC n j j</kbd></td><td class="d">today's journal entry</td></tr>
+      <tr><td class="k"><kbd>SPC n j n / p</kbd></td><td class="d">next / prev day</td></tr>
+      <tr><td class="k"><kbd>SPC n j s</kbd></td><td class="d">search journal</td></tr>
+      <tr><td class="k"><kbd>SPC n r f</kbd></td><td class="d">find / create roam note</td></tr>
+      <tr><td class="k"><kbd>SPC n r i</kbd></td><td class="d">insert note link</td></tr>
+      <tr><td class="k"><kbd>SPC n g</kbd></td><td class="d">roam graph</td></tr>
+      <tr><td class="k"><kbd>SPC n b b</kbd></td><td class="d">insert citation</td></tr>
+      <tr><td class="k"><kbd>SPC t y</kbd></td><td class="d"><b>writing theme</b> (prose)</td></tr>
+    </table>
+  </div>
+
+  <div class="card git">
+    <h2>Git <span class="n">Magit</span></h2>
+    <table>
+      <tr><td class="k"><kbd>SPC g g</kbd></td><td class="d">status (the hub)</td></tr>
+      <tr><td class="k"><kbd>s u</kbd></td><td class="d">stage / unstage (in status)</td></tr>
+      <tr><td class="k"><kbd>c c</kbd></td><td class="d">commit</td></tr>
+      <tr><td class="k"><kbd>C-c i</kbd></td><td class="d"><b>AI commit message</b></td></tr>
+      <tr><td class="k"><kbd>P p / F u</kbd></td><td class="d">push / pull</td></tr>
+      <tr><td class="k"><kbd>b b / b c</kbd></td><td class="d">checkout / new branch</td></tr>
+      <tr><td class="k"><kbd>l l / z z</kbd></td><td class="d">log / stash</td></tr>
+    </table>
+  </div>
+
+  <div class="card base">
+    <h2>Themes &amp; Misc <span class="n">SPC t</span></h2>
+    <table>
+      <tr><td class="k"><kbd>SPC t T</kbd></td><td class="d">switch code theme (live)</td></tr>
+      <tr><td class="k"><kbd>SPC t L</kbd></td><td class="d">light / dark toggle</td></tr>
+      <tr><td class="k"><kbd>SPC t y</kbd></td><td class="d">writing (Typora) theme</td></tr>
+      <tr><td class="k"><kbd>SPC t z / o</kbd></td><td class="d">zen / centered writing</td></tr>
+      <tr><td class="k"><kbd>SPC o t</kbd></td><td class="d">terminal (vterm)</td></tr>
+      <tr><td class="k"><kbd>SPC o w</kbd></td><td class="d">browser in Emacs</td></tr>
+      <tr><td class="k"><kbd>SPC o p</kbd></td><td class="d">file tree sidebar</td></tr>
+      <tr><td class="k"><kbd>C-c H</kbd></td><td class="d">on-screen cheat sheet</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="legend">
+  <span class="lg"><span class="sw" style="background:#3d4256"></span>editor &amp; nav</span>
+  <span class="lg"><span class="sw" style="background:#2f5496"></span>code &amp; debug</span>
+  <span class="lg"><span class="sw" style="background:#5a47a3"></span>AI &amp; Claude</span>
+  <span class="lg"><span class="sw" style="background:#2c7a66"></span>plan &amp; notes</span>
+  <span class="lg"><span class="sw" style="background:#9a445a"></span>git</span>
+  <span class="tip">Don't memorize, just press <kbd>SPC</kbd> and read the menu. Fluency comes from one colored block at a time.</span>
+</div>
+
+</body>
+</html>

@@ -1,23 +1,13 @@
-# Compiled Elisp
-*.elc
-*.eln
-
-# Auto-generated customizations (may contain local paths)
-custom.el
-
-# Doom local state
-.local/
-
-# Org files (personal notes, journal, calendar -- keep private)
-*.org
-
-# Environment / secrets
-# OUTLOOK_CALENDAR_ICS_URL must be set in ~/.zshrc, not hardcoded in config.el
-.env
-.envrc
-*.pem
-*.key
-*.ics
-
 # macOS
 .DS_Store
+
+# Backups and editor temp files
+*.bak
+*~
+\#*\#
+.\#*
+
+# machine-local, not for the repo
+.claude/
+.ruff_cache/
+*.elc

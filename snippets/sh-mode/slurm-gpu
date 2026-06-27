@@ -3,7 +3,7 @@
 # --
 #!/bin/bash
 #SBATCH --job-name=${1:job_name}
-#SBATCH --account=your-account-id
+#SBATCH --account=r00602
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=${2:4}

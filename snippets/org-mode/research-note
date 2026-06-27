@@ -1,0 +1,27 @@
+# name: Research experiment note
+# key: research-note
+# --
+* ${1:Experiment Title}
+:PROPERTIES:
+:DATE:       `(format-time-string "%Y-%m-%d")`
+:PROJECT:    ${2:DOT/MCX/Neonatal}
+:STATUS:     ${3:IN-PROGRESS}
+:END:
+
+** Hypothesis
+${4:What are we testing?}
+
+** Setup
+- Dataset  :: ${5:description}
+- Script   :: ~${6:path/to/script.py}~
+- Params   :: ${7:key parameters}
+
+** Results
+${8:Paste output, figures, or observations here.}
+
+** Interpretation
+${9:What do the results mean?}
+
+** Next Steps
+- [ ] ${10:follow-up action}
+$0

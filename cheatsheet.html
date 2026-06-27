@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emacs Reference</title>
+<style>
+:root {
+  --bg:      #1e2030;
+  --bg2:     #252837;
+  --bg3:     #2d3149;
+  --border:  #383d5a;
+  --text:    #c8d3f5;
+  --muted:   #545c7e;
+  --blue:    #82aaff;
+  --purple:  #c099ff;
+  --green:   #c3e88d;
+  --yellow:  #ffc777;
+  --red:     #ff757f;
+  --cyan:    #86e1fc;
+  --orange:  #ff966c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Segoe UI", sans-serif;
+  font-size: 12px;
+  line-height: 1.45;
+  padding: 14px 16px 32px;
+}
+
+/* ── SEARCH ── */
+#search-wrap {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 8px 0 10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+#search {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 12px;
+  padding: 5px 10px;
+  outline: none;
+}
+#search::placeholder { color: var(--muted); }
+#search:focus { border-color: var(--blue); }
+.search-hint { color: var(--muted); font-size: 11px; white-space: nowrap; }
+
+/* ── GRID ── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+/* ── SECTION ── */
+.section { margin-bottom: 20px; }
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--muted);
+  padding: 0 2px 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 11px;
+  break-inside: avoid;
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--purple);
+  margin-bottom: 7px;
+}
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 1.5px 0;
+  transition: background .1s;
+}
+.row:hover { background: var(--bg3); border-radius: 3px; }
+kbd {
+  font-family: "SF Mono","Fira Code","Cascadia Code",monospace;
+  font-size: 10.5px;
+  color: var(--cyan);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 1px 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 108px;
+}
+kbd.w { min-width: 132px; }
+kbd.xs { min-width: 70px; }
+.desc { color: var(--text); font-size: 11.5px; flex: 1; }
+.muted { color: var(--muted); }
+.tag {
+  font-size: 9px; font-weight: 700;
+  border-radius: 3px; padding: 1px 4px;
+  flex-shrink: 0;
+}
+.new    { background: #1a3320; color: var(--green); }
+.hot    { background: #3a2010; color: var(--orange); }
+.tip    { background: #26143d; color: var(--purple); }
+.warn   { background: #3a1010; color: var(--red); }
+.note {
+  font-size: 10.5px; color: var(--muted); margin-top: 5px;
+  padding: 4px 7px; border-left: 2px solid var(--border);
+  border-radius: 0 3px 3px 0; background: var(--bg3);
+}
+.demo {
+  font-family: "SF Mono","Fira Code",monospace; font-size: 10.5px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 4px; padding: 5px 8px; margin: 5px 0;
+}
+.sep { color: var(--muted); }
+.hl-g { color: var(--green); }
+.hl-y { color: var(--yellow); }
+.hl-p { color: var(--purple); }
+.hl-b { color: var(--blue); }
+.hl-c { color: var(--cyan); }
+
+/* hide on filter */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div id="search-wrap">
+  <input id="search" type="text" placeholder="Filter keys or descriptions..." autocomplete="off" autofocus>
+  <span class="search-hint">type to filter</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- EVIL / VIM BASICS -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Evil — Modal Editing (Vim)</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Modes</div>
+      <div class="row"><kbd class="xs">ESC</kbd>    <span class="desc">Normal mode (always works)</span></div>
+      <div class="row"><kbd class="xs">i</kbd>      <span class="desc">Insert before cursor</span></div>
+      <div class="row"><kbd class="xs">a</kbd>      <span class="desc">Insert after cursor</span></div>
+      <div class="row"><kbd class="xs">I / A</kbd>  <span class="desc">Insert start / end of line</span></div>
+      <div class="row"><kbd class="xs">o / O</kbd>  <span class="desc">New line below / above + insert</span></div>
+      <div class="row"><kbd class="xs">v</kbd>      <span class="desc">Visual (char)</span></div>
+      <div class="row"><kbd class="xs">V</kbd>      <span class="desc">Visual (line)</span></div>
+      <div class="row"><kbd class="xs">C-v</kbd>    <span class="desc">Visual (block / column)</span></div>
+      <div class="row"><kbd class="xs">R</kbd>      <span class="desc">Replace mode</span></div>
+      <div class="row"><kbd class="xs">:</kbd>      <span class="desc">Ex command line</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Motion</div>
+      <div class="row"><kbd class="xs">h j k l</kbd>  <span class="desc">Left, down, up, right</span></div>
+      <div class="row"><kbd class="xs">w / b</kbd>    <span class="desc">Next / prev word start</span></div>
+      <div class="row"><kbd class="xs">e / ge</kbd>   <span class="desc">Word end forward / back</span></div>
+      <div class="row"><kbd class="xs">0 / $</kbd>    <span class="desc">Line start / end</span></div>
+      <div class="row"><kbd class="xs">^ / g_</kbd>   <span class="desc">First / last non-blank</span></div>
+      <div class="row"><kbd class="xs">gg / G</kbd>   <span class="desc">File start / end</span></div>
+      <div class="row"><kbd class="xs">N G</kbd>      <span class="desc">Go to line N</span></div>
+      <div class="row"><kbd class="xs">C-d / C-u</kbd><span class="desc">Half page down / up</span></div>
+      <div class="row"><kbd class="xs">C-f / C-b</kbd><span class="desc">Full page down / up</span></div>
+      <div class="row"><kbd class="xs">zz / zt / zb</kbd><span class="desc">Center / top / bottom cursor</span></div>
+      <div class="row"><kbd class="xs">% </kbd>       <span class="desc">Jump to matching bracket</span></div>
+      <div class="row"><kbd class="xs">f{c} / F{c}</kbd><span class="desc">Find char forward / back on line</span></div>
+      <div class="row"><kbd class="xs">; / ,</kbd>    <span class="desc">Repeat / reverse last f/F/t/T</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Operators (use with motion/text-object)</div>
+      <div class="row"><kbd class="xs">d</kbd>  <span class="desc">Delete (cuts to register)</span></div>
+      <div class="row"><kbd class="xs">c</kbd>  <span class="desc">Change (delete + enter insert)</span></div>
+      <div class="row"><kbd class="xs">y</kbd>  <span class="desc">Yank (copy)</span></div>
+      <div class="row"><kbd class="xs">p / P</kbd><span class="desc">Paste after / before</span></div>
+      <div class="row"><kbd class="xs">&gt; / &lt;</kbd><span class="desc">Indent / dedent</span></div>
+      <div class="row"><kbd class="xs">=</kbd>  <span class="desc">Auto-indent</span></div>
+      <div class="row"><kbd class="xs">gu / gU</kbd><span class="desc">Lowercase / uppercase</span></div>
+      <div class="row"><kbd class="xs">dd / yy</kbd><span class="desc">Delete / yank whole line</span></div>
+      <div class="row"><kbd class="xs">D / C</kbd>  <span class="desc">Delete / change to end of line</span></div>
+      <div class="row"><kbd class="xs">x</kbd>      <span class="desc">Delete char under cursor</span></div>
+      <div class="row"><kbd class="xs">r{c}</kbd>   <span class="desc">Replace char with c</span></div>
+      <div class="row"><kbd class="xs">u / C-r</kbd><span class="desc">Undo / redo</span></div>
+      <div class="row"><kbd class="xs">.</kbd>      <span class="desc">Repeat last change</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Text Objects</div>
+      <div class="note">Use after operator: <kbd style="min-width:auto;font-size:10px">d i w</kbd> = delete inner word</div>
+      <div class="row"><kbd class="xs">i w / a w</kbd><span class="desc">inner / around word</span></div>
+      <div class="row"><kbd class="xs">i W / a W</kbd><span class="desc">inner / around WORD</span></div>
+      <div class="row"><kbd class="xs">i p / a p</kbd><span class="desc">inner / around paragraph</span></div>
+      <div class="row"><kbd class="xs">i ( / a (</kbd><span class="desc">inner / around parens</span></div>
+      <div class="row"><kbd class="xs">i [ / a [</kbd><span class="desc">inner / around brackets</span></div>
+      <div class="row"><kbd class="xs">i { / a {</kbd><span class="desc">inner / around braces</span></div>
+      <div class="row"><kbd class="xs">i " / a "</kbd><span class="desc">inner / around double quotes</span></div>
+      <div class="row"><kbd class="xs">i ' / a '</kbd><span class="desc">inner / around single quotes</span></div>
+      <div class="row"><kbd class="xs">i t / a t</kbd><span class="desc">inner / around XML/HTML tag</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Search &amp; Replace</div>
+      <div class="row"><kbd class="xs">/{pat}</kbd>  <span class="desc">Search forward</span></div>
+      <div class="row"><kbd class="xs">?{pat}</kbd>  <span class="desc">Search backward</span></div>
+      <div class="row"><kbd class="xs">n / N</kbd>   <span class="desc">Next / prev match</span></div>
+      <div class="row"><kbd class="xs">* / #</kbd>   <span class="desc">Search word under cursor fwd / bwd</span></div>
+      <div class="row"><kbd class="xs">:%s/a/b/g</kbd><span class="desc">Replace all in file</span></div>
+      <div class="row"><kbd class="xs">:s/a/b/g</kbd><span class="desc">Replace all in selection</span></div>
+      <div class="row"><kbd class="xs">g c {mot}</kbd><span class="desc">Toggle comment (evil-commentary)</span></div>
+      <div class="row"><kbd class="xs">g c c</kbd>   <span class="desc">Toggle comment on line</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Marks &amp; Jumps</div>
+      <div class="row"><kbd class="xs">m{a-z}</kbd>  <span class="desc">Set mark</span></div>
+      <div class="row"><kbd class="xs">'{a-z}</kbd>  <span class="desc">Jump to mark (line)</span></div>
+      <div class="row"><kbd class="xs">`{a-z}</kbd>  <span class="desc">Jump to mark (exact pos)</span></div>
+      <div class="row"><kbd class="xs">''</kbd>       <span class="desc">Jump to last jump position</span></div>
+      <div class="row"><kbd class="xs">C-o / C-i</kbd><span class="desc">Jump back / forward (jumplist)</span></div>
+      <div class="row"><kbd class="xs">gi</kbd>       <span class="desc">Jump to last insert position</span></div>
+      <div class="row"><kbd class="xs">q{a} ... q</kbd><span class="desc">Record macro into register a</span></div>
+      <div class="row"><kbd class="xs">@{a}</kbd>     <span class="desc">Play macro from register a</span></div>
+      <div class="row"><kbd class="xs">@@</kbd>       <span class="desc">Replay last macro</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- DOOM SPC PREFIX -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Doom Emacs — SPC Leader</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Files</div>
+      <div class="row"><kbd>SPC f f</kbd>  <span class="desc">Find file</span></div>
+      <div class="row"><kbd>SPC f r</kbd>  <span class="desc">Recent files</span></div>
+      <div class="row"><kbd>SPC f s</kbd>  <span class="desc">Save file</span></div>
+      <div class="row"><kbd>SPC f S</kbd>  <span class="desc">Save all buffers</span></div>
+      <div class="row"><kbd>SPC f d</kbd>  <span class="desc">Find directory (dired)</span></div>
+      <div class="row"><kbd>SPC f e d</kbd><span class="desc">Open config.el</span></div>
+      <div class="row"><kbd>SPC f e R</kbd><span class="desc">Reload Doom config</span></div>
+      <div class="row"><kbd>SPC f y</kbd>  <span class="desc">Copy file path</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Buffers</div>
+      <div class="row"><kbd>SPC b b</kbd>  <span class="desc">Switch buffer</span></div>
+      <div class="row"><kbd>SPC b d</kbd>  <span class="desc">Kill buffer</span></div>
+      <div class="row"><kbd>SPC b k</kbd>  <span class="desc">Kill buffer (alt)</span></div>
+      <div class="row"><kbd>SPC b n</kbd>  <span class="desc">Next buffer</span></div>
+      <div class="row"><kbd>SPC b p</kbd>  <span class="desc">Prev buffer</span></div>
+      <div class="row"><kbd>SPC b r</kbd>  <span class="desc">Revert buffer from disk</span></div>
+      <div class="row"><kbd>SPC b s</kbd>  <span class="desc">Save buffer</span></div>
+      <div class="row"><kbd>SPC b N</kbd>  <span class="desc">New empty buffer</span></div>
+      <div class="row"><kbd>SPC b K</kbd>  <span class="desc">Kill all buffers</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Windows</div>
+      <div class="row"><kbd>SPC w v</kbd>  <span class="desc">Split vertical</span></div>
+      <div class="row"><kbd>SPC w s</kbd>  <span class="desc">Split horizontal</span></div>
+      <div class="row"><kbd>SPC w d</kbd>  <span class="desc">Close window</span></div>
+      <div class="row"><kbd>SPC w o</kbd>  <span class="desc">Close other windows</span></div>
+      <div class="row"><kbd>SPC w h/j/k/l</kbd><span class="desc">Move focus left/down/up/right</span></div>
+      <div class="row"><kbd>SPC w H/J/K/L</kbd><span class="desc">Move window left/down/up/right</span></div>
+      <div class="row"><kbd>SPC w =</kbd>  <span class="desc">Balance windows</span></div>
+      <div class="row"><kbd>SPC w m</kbd>  <span class="desc">Maximize window</span></div>
+      <div class="row"><kbd>C-w C-w</kbd>  <span class="desc">Cycle windows</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Project</div>
+      <div class="row"><kbd>SPC p p</kbd>  <span class="desc">Switch project</span></div>
+      <div class="row"><kbd>SPC p f</kbd>  <span class="desc">Find file in project</span></div>
+      <div class="row"><kbd>SPC p s</kbd>  <span class="desc">Search in project (ripgrep)</span></div>
+      <div class="row"><kbd>SPC p b</kbd>  <span class="desc">Switch project buffer</span></div>
+      <div class="row"><kbd>SPC p k</kbd>  <span class="desc">Kill project buffers</span></div>
+      <div class="row"><kbd>SPC p t</kbd>  <span class="desc">List project todos</span></div>
+      <div class="row"><kbd>SPC p r</kbd>  <span class="desc">Recent project files</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Search (Consult)</div>
+      <div class="row"><kbd>SPC s s</kbd>  <span class="desc">Search buffer (swiper)</span></div>
+      <div class="row"><kbd>SPC s p</kbd>  <span class="desc">Search project (ripgrep)</span></div>
+      <div class="row"><kbd>SPC s d</kbd>  <span class="desc">Search directory</span></div>
+      <div class="row"><kbd>SPC s r</kbd>  <span class="desc">Resume last search</span></div>
+      <div class="row"><kbd>C-c s l</kbd>  <span class="desc">Consult line (current buffer)</span></div>
+      <div class="row"><kbd>C-c s p</kbd>  <span class="desc">Consult ripgrep (project)</span></div>
+      <div class="row"><kbd>C-c s b</kbd>  <span class="desc">Consult buffer switch</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Code &amp; LSP</div>
+      <div class="row"><kbd>SPC c d</kbd>  <span class="desc">Go to definition</span></div>
+      <div class="row"><kbd>SPC c D</kbd>  <span class="desc">Go to references</span></div>
+      <div class="row"><kbd>SPC c k</kbd>  <span class="desc">Docs at point</span></div>
+      <div class="row"><kbd>SPC c r</kbd>  <span class="desc">Rename symbol</span></div>
+      <div class="row"><kbd>SPC c a</kbd>  <span class="desc">Code actions</span></div>
+      <div class="row"><kbd>SPC c f</kbd>  <span class="desc">Format buffer/region</span></div>
+      <div class="row"><kbd>SPC c e</kbd>  <span class="desc">List errors (diagnostics)</span></div>
+      <div class="row"><kbd>SPC c i</kbd>  <span class="desc">Find implementations</span></div>
+      <div class="row"><kbd>SPC c j</kbd>  <span class="desc">Jump to symbol in file</span></div>
+      <div class="row"><kbd>g d</kbd>      <span class="desc">Go to definition (evil)</span></div>
+      <div class="row"><kbd>g r</kbd>      <span class="desc">Find references (evil)</span></div>
+      <div class="row"><kbd>K</kbd>        <span class="desc">Docs hover (evil normal)</span></div>
+      <div class="row"><kbd>[d / ]d</kbd>  <span class="desc">Prev / next diagnostic</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Toggle</div>
+      <div class="row"><kbd>SPC t l</kbd>  <span class="desc">Line numbers</span></div>
+      <div class="row"><kbd>SPC t r</kbd>  <span class="desc">Relative line numbers</span></div>
+      <div class="row"><kbd>SPC t w</kbd>  <span class="desc">Word wrap</span></div>
+      <div class="row"><kbd>SPC t f</kbd>  <span class="desc">Flycheck (lint)</span></div>
+      <div class="row"><kbd>SPC t i</kbd>  <span class="desc">Indent guides</span></div>
+      <div class="row"><kbd>SPC t t</kbd>  <span class="desc">Truncate lines</span></div>
+      <div class="row"><kbd>SPC t b</kbd>  <span class="desc">Big font mode</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Help &amp; Docs</div>
+      <div class="row"><kbd>SPC h k</kbd>  <span class="desc">Describe keybinding</span></div>
+      <div class="row"><kbd>SPC h f</kbd>  <span class="desc">Describe function</span></div>
+      <div class="row"><kbd>SPC h v</kbd>  <span class="desc">Describe variable</span></div>
+      <div class="row"><kbd>SPC h m</kbd>  <span class="desc">Describe mode</span></div>
+      <div class="row"><kbd>SPC h p</kbd>  <span class="desc">Describe package</span></div>
+      <div class="row"><kbd>SPC h i</kbd>  <span class="desc">Info pages</span></div>
+      <div class="row"><kbd>SPC h d h</kbd><span class="desc">Doom help</span></div>
+      <div class="row"><kbd>SPC h r r</kbd><span class="desc">Reload config (doom/reload)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- WORKSPACES -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Workspaces</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">Switch &amp; Manage</div>
+      <div class="row"><kbd>SPC TAB TAB</kbd><span class="desc">Switch workspace (completing-read)</span></div>
+      <div class="row"><kbd>SPC TAB n</kbd>  <span class="desc">New workspace</span></div>
+      <div class="row"><kbd>SPC TAB d</kbd>  <span class="desc">Delete workspace</span></div>
+      <div class="row"><kbd>SPC TAB ]</kbd>  <span class="desc">Next workspace</span></div>
+      <div class="row"><kbd>SPC TAB [</kbd>  <span class="desc">Prev workspace</span></div>
+      <div class="row"><kbd>SPC TAB r</kbd>  <span class="desc">Rename workspace</span></div>
+      <div class="row"><kbd>SPC TAB s</kbd>  <span class="desc">Save workspaces to file</span></div>
+      <div class="row"><kbd>SPC TAB l</kbd>  <span class="desc">Load workspaces from file</span></div>
+      <div class="row"><kbd>M-x persp-load-state-from-file</kbd></div>
+      <div class="note">After restart: run persp-load-state-from-file to restore all sessions.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cockpit Layout</div>
+      <div class="row"><kbd>SPC A W</kbd>  <span class="desc">Create / switch cockpit workspace</span></div>
+      <div class="row"><kbd>SPC A w</kbd>  <span class="desc">Activate collaborator layout</span></div>
+      <div class="row"><kbd>SPC A e</kbd>  <span class="desc">Open eat terminal (local)</span></div>
+      <div class="row"><kbd>SPC A s</kbd>  <span class="desc">SSH to BigRed200</span></div>
+      <div class="row"><kbd>SPC A r</kbd>  <span class="desc">SSH to br200 + Claude Code</span></div>
+      <div class="row"><kbd>SPC A a</kbd>  <span class="desc">Open agent-shell</span></div>
+      <div class="row"><kbd>SPC A q</kbd>  <span class="desc">Close cockpit workspace</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- MAGIT -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Magit — Git</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Open &amp; Navigate</div>
+      <div class="row"><kbd>SPC g g</kbd>  <span class="desc">Magit status</span></div>
+      <div class="row"><kbd>SPC g l</kbd>  <span class="desc">Magit log</span></div>
+      <div class="row"><kbd>SPC g d</kbd>  <span class="desc">Diff current file</span></div>
+      <div class="row"><kbd>SPC g b</kbd>  <span class="desc">Blame (annotate)</span></div>
+      <div class="row"><kbd>SPC g f</kbd>  <span class="desc">Find file in git history</span></div>
+      <div class="row"><kbd>SPC g t</kbd>  <span class="desc">Time machine (git-timemachine)</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Status Buffer</div>
+      <div class="row"><kbd class="xs">s</kbd>   <span class="desc">Stage file / hunk</span></div>
+      <div class="row"><kbd class="xs">u</kbd>   <span class="desc">Unstage file / hunk</span></div>
+      <div class="row"><kbd class="xs">c c</kbd> <span class="desc">Commit</span></div>
+      <div class="row"><kbd class="xs">c a</kbd> <span class="desc">Amend last commit</span></div>
+      <div class="row"><kbd class="xs">P u</kbd> <span class="desc">Push to upstream</span></div>
+      <div class="row"><kbd class="xs">F u</kbd> <span class="desc">Pull from upstream</span></div>
+      <div class="row"><kbd class="xs">b b</kbd> <span class="desc">Checkout branch</span></div>
+      <div class="row"><kbd class="xs">b c</kbd> <span class="desc">Create new branch</span></div>
+      <div class="row"><kbd class="xs">r r</kbd> <span class="desc">Rebase interactive</span></div>
+      <div class="row"><kbd class="xs">z z</kbd> <span class="desc">Stash</span></div>
+      <div class="row"><kbd class="xs">z p</kbd> <span class="desc">Pop stash</span></div>
+      <div class="row"><kbd class="xs">TAB</kbd> <span class="desc">Expand / collapse section</span></div>
+      <div class="row"><kbd class="xs">RET</kbd> <span class="desc">Visit file / diff</span></div>
+      <div class="row"><kbd class="xs">q</kbd>   <span class="desc">Close magit</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">AI Commit <span class="tag new">new</span></div>
+      <div class="row"><kbd class="w">M-x gptel-magit-generate-commit</kbd></div>
+      <div class="note">Stage changes first, then run this. Claude reads the diff and writes the commit message. Best used for meaningful commits.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- ORG MODE -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Org Mode &amp; Org-Roam</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Structure</div>
+      <div class="row"><kbd>M-RET</kbd>    <span class="desc">New heading / list item</span></div>
+      <div class="row"><kbd>TAB</kbd>      <span class="desc">Cycle heading fold</span></div>
+      <div class="row"><kbd>S-TAB</kbd>    <span class="desc">Cycle all headings</span></div>
+      <div class="row"><kbd>M-h/l</kbd>   <span class="desc">Promote / demote heading</span></div>
+      <div class="row"><kbd>M-j/k</kbd>   <span class="desc">Move heading down / up</span></div>
+      <div class="row"><kbd>C-c C-n</kbd> <span class="desc">Next heading</span></div>
+      <div class="row"><kbd>C-c C-p</kbd> <span class="desc">Prev heading</span></div>
+      <div class="row"><kbd>C-c C-q</kbd> <span class="desc">Set tags</span></div>
+      <div class="row"><kbd>C-c C-d</kbd> <span class="desc">Set deadline</span></div>
+      <div class="row"><kbd>C-c C-s</kbd> <span class="desc">Set scheduled</span></div>
+      <div class="row"><kbd>C-c C-t</kbd> <span class="desc">Cycle TODO state</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Links &amp; Tables</div>
+      <div class="row"><kbd>C-c C-l</kbd> <span class="desc">Insert / edit link</span></div>
+      <div class="row"><kbd>C-c C-o</kbd> <span class="desc">Open link at point</span></div>
+      <div class="row"><kbd>C-c l</kbd>   <span class="desc">Store link (from any buffer)</span></div>
+      <div class="row"><kbd>TAB</kbd>     <span class="desc">Next table cell</span></div>
+      <div class="row"><kbd>S-TAB</kbd>   <span class="desc">Prev table cell</span></div>
+      <div class="row"><kbd>C-c C-c</kbd> <span class="desc">Recalculate / confirm</span></div>
+      <div class="row"><kbd>C-c |</kbd>   <span class="desc">Convert region to table</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Babel (Code Blocks)</div>
+      <div class="row"><kbd>C-c C-c</kbd> <span class="desc">Execute block</span></div>
+      <div class="row"><kbd>C-c '</kbd>   <span class="desc">Edit block in major-mode buffer</span></div>
+      <div class="row"><kbd>C-c C-v t</kbd><span class="desc">Tangle (export code to files)</span></div>
+      <div class="demo"><span class="hl-b">#+begin_src</span> <span class="hl-g">python</span>
+import numpy as np
+np.zeros(5)
+<span class="hl-b">#+end_src</span></div>
+      <div class="demo"><span class="hl-b">#+begin_src</span> <span class="hl-g">gptel</span>
+Explain this function
+<span class="hl-b">#+end_src</span>
+<span class="muted">C-c C-c → Claude responds inline</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Org-Roam</div>
+      <div class="row"><kbd>SPC n r f</kbd><span class="desc">Find / create note</span></div>
+      <div class="row"><kbd>SPC n r i</kbd><span class="desc">Insert link to note</span></div>
+      <div class="row"><kbd>SPC n r r</kbd><span class="desc">Show backlinks (buffer)</span></div>
+      <div class="row"><kbd>SPC n r g</kbd><span class="desc">Show graph</span></div>
+      <div class="row"><kbd>SPC n r d</kbd><span class="desc">Daily note (journal)</span></div>
+      <div class="row"><kbd>SPC n r c</kbd><span class="desc">Capture to roam</span></div>
+      <div class="row"><kbd>C-c n l</kbd>  <span class="desc">Toggle roam buffer</span></div>
+      <div class="note">Notes live in ~/org/roam/. Link with [[roam:Title]].</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Export &amp; Present</div>
+      <div class="row"><kbd>C-c C-e</kbd> <span class="desc">Export dispatcher</span></div>
+      <div class="row"><kbd>C-c C-e h h</kbd><span class="desc">Export to HTML</span></div>
+      <div class="row"><kbd>C-c C-e l p</kbd><span class="desc">Export to PDF (LaTeX)</span></div>
+      <div class="row"><kbd>C-c C-e m m</kbd><span class="desc">Export to Markdown</span></div>
+      <div class="row"><kbd>SPC m P</kbd> <span class="desc">org-present start</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- COMPLETION -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Completion — Corfu &amp; Vertico</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Corfu (in-buffer completion)</div>
+      <div class="row"><kbd class="xs">TAB</kbd>      <span class="desc">Complete / next candidate</span></div>
+      <div class="row"><kbd class="xs">S-TAB</kbd>    <span class="desc">Prev candidate</span></div>
+      <div class="row"><kbd class="xs">RET</kbd>      <span class="desc">Accept candidate</span></div>
+      <div class="row"><kbd class="xs">C-g / ESC</kbd><span class="desc">Dismiss</span></div>
+      <div class="row"><kbd class="xs">M-d</kbd>      <span class="desc">Candidate documentation</span></div>
+      <div class="row"><kbd class="xs">M-.</kbd>      <span class="desc">Candidate location</span></div>
+      <div class="note">Cape enhances completion: adds file paths, dabbrev, shell history automatically.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Vertico (minibuffer completion)</div>
+      <div class="row"><kbd class="xs">C-n / C-p</kbd><span class="desc">Next / prev candidate</span></div>
+      <div class="row"><kbd class="xs">RET</kbd>      <span class="desc">Select</span></div>
+      <div class="row"><kbd class="xs">TAB</kbd>      <span class="desc">Insert current candidate</span></div>
+      <div class="row"><kbd class="xs">C-RET</kbd>    <span class="desc">Enter directory</span></div>
+      <div class="row"><kbd class="xs">M-RET</kbd>    <span class="desc">Use input verbatim</span></div>
+      <div class="row"><kbd class="xs">C-l</kbd>      <span class="desc">Go up a directory</span></div>
+      <div class="note">Orderless: type words in any order to filter. Space = AND.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Embark (actions on things)</div>
+      <div class="row"><kbd>C-c .</kbd>  <span class="desc">Embark act (context menu at point)</span></div>
+      <div class="row"><kbd>C-c ;</kbd>  <span class="desc">Embark default action</span></div>
+      <div class="row"><kbd class="xs">C-.</kbd> <span class="desc">Embark act (in minibuffer)</span></div>
+      <div class="note">In minibuffer: C-. on a candidate to act on it without leaving.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- PYTHON -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Python Workflow</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">REPL &amp; Eval</div>
+      <div class="row"><kbd>SPC o r</kbd>   <span class="desc">Open Python REPL</span></div>
+      <div class="row"><kbd>C-c C-c</kbd>   <span class="desc">Send region / buffer to REPL</span></div>
+      <div class="row"><kbd>C-c C-l</kbd>   <span class="desc">Send line to REPL</span></div>
+      <div class="row"><kbd>C-c C-z</kbd>   <span class="desc">Switch to REPL</span></div>
+      <div class="row"><kbd>SPC c e</kbd>   <span class="desc">Eval expression</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Environment</div>
+      <div class="row"><kbd>M-x pyvenv-activate</kbd>   <span class="desc">Activate venv</span></div>
+      <div class="row"><kbd>M-x pyvenv-workon</kbd>     <span class="desc">Switch virtualenv</span></div>
+      <div class="row"><kbd>M-x conda-env-activate</kbd><span class="desc">Activate conda env</span></div>
+      <div class="note">pyrepl disabled in v2.1.0 to fix C-c C-c interrupt. Use ipython in vterm instead.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Navigation &amp; Refactor</div>
+      <div class="row"><kbd>g d</kbd>     <span class="desc">Go to definition (pyright)</span></div>
+      <div class="row"><kbd>g r</kbd>     <span class="desc">Find references</span></div>
+      <div class="row"><kbd>SPC c r</kbd> <span class="desc">Rename symbol</span></div>
+      <div class="row"><kbd>SPC c a</kbd> <span class="desc">Code actions (extract fn, etc.)</span></div>
+      <div class="row"><kbd>SPC c f</kbd> <span class="desc">Format with ruff</span></div>
+      <div class="row"><kbd>[d / ]d</kbd> <span class="desc">Prev / next error (flymake)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- CLAUDE CODE IDE -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Claude Code IDE <span class="tag new">new features</span></div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Sessions</div>
+      <div class="row"><kbd>C-c c c</kbd>   <span class="desc">Start / toggle session</span></div>
+      <div class="row"><kbd>C-c c k</kbd>   <span class="desc">Continue most recent</span></div>
+      <div class="row"><kbd>C-c c r</kbd>   <span class="desc">Resume from history</span></div>
+      <div class="row"><kbd>C-c c s</kbd>   <span class="desc">Switch sessions</span></div>
+      <div class="row"><kbd>C-c c t</kbd>   <span class="desc">Toggle window</span></div>
+      <div class="row"><kbd>C-c C-'</kbd>   <span class="desc">Full transient menu</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Interaction</div>
+      <div class="row"><kbd>C-c c p</kbd>   <span class="desc">Send prompt from minibuffer</span></div>
+      <div class="row"><kbd>C-c c @</kbd>   <span class="desc">Send selected region</span></div>
+      <div class="row"><kbd>S-RET</kbd>     <span class="desc">New line in Claude terminal</span></div>
+      <div class="row"><kbd>C-&lt;esc&gt;</kbd><span class="desc">Send escape to terminal</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Multi-instance (claude-code.el)</div>
+      <div class="row"><kbd>C-c c n</kbd>   <span class="desc">New named instance</span></div>
+      <div class="row"><kbd>C-c c b</kbd>   <span class="desc">Switch instance (project)</span></div>
+      <div class="row"><kbd>C-c c B</kbd>   <span class="desc">Switch instance (all)</span></div>
+      <div class="row"><kbd>C-c c K</kbd>   <span class="desc">Kill all instances</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Live Status Bar <span class="tag new">new</span></div>
+      <div class="demo">
+        <span class="hl-g">● idle  last 8s</span> <span class="sep">│</span> <span class="hl-c">██░░░░</span><span class="muted">░░░░░░░░</span> <span class="hl-c">14%</span>  <span class="muted">230K/1M │ ↩ 11</span>
+      </div>
+      <div class="demo"><span class="hl-b">⠸ sent 1s</span>  <span class="muted">← waiting for Claude to start</span></div>
+      <div class="demo"><span class="hl-p">⠦ think 42s</span>  <span class="muted">← extended thinking</span></div>
+      <div class="demo"><span class="hl-y">⠴ recv 8s</span>  <span class="muted">← streaming tokens</span></div>
+      <div class="row" style="margin-top:6px"><kbd>C-c c a</kbd>  <span class="desc">Analytics buffer</span></div>
+      <div class="row"><kbd>C-c c u</kbd>  <span class="desc">Refresh real token counts</span></div>
+      <div class="note">Token data read from ~/.claude/projects/ JSONL. Run /usage in terminal first, then C-c c u.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Scroll During Streaming <span class="tag new">new</span></div>
+      <div class="note">Scroll up freely while Claude is thinking or streaming. The view locks automatically when you scroll away from the bottom. Scroll back to bottom to resume following output.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- LLM / GPTEL -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">:tools llm — gptel <span class="tag new">new</span></div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Chat &amp; Quick</div>
+      <div class="row"><kbd class="w">M-x gptel</kbd>        <span class="desc">Open chat buffer (org-mode)</span></div>
+      <div class="row"><kbd class="w">M-x gptel-menu</kbd>   <span class="desc">Settings / switch model</span></div>
+      <div class="row"><kbd class="w">M-x gptel-rewrite</kbd><span class="desc">Rewrite selection (shows diff)</span></div>
+      <div class="row"><kbd class="w">M-x gptel-quick</kbd>  <span class="desc">One-liner answer at point</span></div>
+      <div class="note">Default: Claude Sonnet 4.6. Switch to Opus 4.6 in gptel-menu for harder tasks.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Magit AI Commit <span class="tag hot">hot</span></div>
+      <div class="note" style="margin-bottom:6px">Stage your changes in magit, then:</div>
+      <div class="row"><kbd class="w">M-x gptel-magit-generate-commit</kbd></div>
+      <div class="note">Claude reads the staged diff and writes a conventional commit message. Edit it before confirming.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Org Babel Blocks <span class="tag tip">tip</span></div>
+      <div class="demo"><span class="hl-b">#+begin_src</span> <span class="hl-g">gptel</span>
+What does cache_read_input_tokens mean?
+<span class="hl-b">#+end_src</span></div>
+      <div class="row"><kbd class="xs">C-c C-c</kbd>  <span class="desc">Execute → Claude responds inline</span></div>
+      <div class="note">Works in any org buffer including org-roam notes. Great for research.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- TERMINAL -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Terminal — vterm &amp; eat</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Open</div>
+      <div class="row"><kbd>SPC o t</kbd>  <span class="desc">Open vterm</span></div>
+      <div class="row"><kbd>SPC o T</kbd>  <span class="desc">Open vterm in project root</span></div>
+      <div class="row"><kbd>SPC A e</kbd>  <span class="desc">Open eat terminal</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">vterm Keys</div>
+      <div class="row"><kbd class="xs">C-c C-t</kbd>  <span class="desc">Toggle copy mode (scroll)</span></div>
+      <div class="row"><kbd class="xs">C-c C-c</kbd>  <span class="desc">Send C-c (interrupt)</span></div>
+      <div class="row"><kbd class="xs">C-c C-z</kbd>  <span class="desc">Send C-z (suspend)</span></div>
+      <div class="note">In copy mode: use normal Emacs navigation. q or C-c C-t to exit.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- HPC -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">HPC — BigRed200 (br200)</div>
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-title">Connection</div>
+      <div class="row"><kbd>SPC A s</kbd>  <span class="desc">SSH to BigRed200</span></div>
+      <div class="row"><kbd>SPC A r</kbd>  <span class="desc">SSH + Claude Code on br200</span></div>
+      <div class="note">Username: atsubhas  Account: r00602  Home: /N/u/atsubhas/BigRed200/</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Key Paths</div>
+      <div class="row"><span class="desc muted">Slate (persist):</span> <span class="desc">/N/slate/atsubhas/</span></div>
+      <div class="row"><span class="desc muted">Scratch (temp):</span>  <span class="desc">/N/scratch/atsubhas/</span></div>
+      <div class="row"><span class="desc muted">GPU partition:</span>   <span class="desc">A100-40GB x4, 512GB RAM</span></div>
+      <div class="row"><span class="desc muted">Context window:</span>  <span class="desc">1M tokens (Sonnet/Opus 4)</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════ -->
+<!-- MISC TIPS -->
+<!-- ════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">Tips &amp; Gotchas</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">Doom-specific</div>
+      <div class="row"><kbd>SPC h r r</kbd>  <span class="desc">Reload config without restart</span></div>
+      <div class="row"><kbd>SPC ;</kbd>      <span class="desc">Eval expression</span></div>
+      <div class="row"><kbd>SPC :</kbd>      <span class="desc">M-x (execute command)</span></div>
+      <div class="row"><kbd>SPC u</kbd>      <span class="desc">Universal argument (C-u)</span></div>
+      <div class="row"><kbd>g z</kbd>       <span class="desc">Fold / unfold (evil-fold)</span></div>
+      <div class="row"><span class="tag warn">!</span> <span class="desc">Doom v2 is in maintenance mode — v3 coming, don't auto-upgrade</span></div>
+      <div class="row"><span class="tag warn">!</span> <span class="desc">dape fetch fails on sync — unrelated, ignore it</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Token / Context</div>
+      <div class="row"><span class="desc">Context window: <strong>1M tokens</strong> (Sonnet/Opus 4.6)</span></div>
+      <div class="row"><span class="desc">Bar turns yellow at 70%, red at 85%</span></div>
+      <div class="row"><span class="desc">Run <kbd style="min-width:auto;font-size:10px">/usage</kbd> in Claude, then <kbd style="min-width:auto;font-size:10px">C-c c u</kbd> for real %</span></div>
+      <div class="row"><span class="desc">Token data: ~/.claude/projects/*/session.jsonl</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const input = document.getElementById('search');
+const rows  = document.querySelectorAll('.row, .card');
+
+input.addEventListener('input', () => {
+  const q = input.value.toLowerCase().trim();
+  if (!q) {
+    rows.forEach(el => el.classList.remove('hidden'));
+    return;
+  }
+  // Show/hide individual rows
+  document.querySelectorAll('.row').forEach(row => {
+    const text = row.textContent.toLowerCase();
+    row.classList.toggle('hidden', !text.includes(q));
+  });
+  // Hide card if all its rows are hidden
+  document.querySelectorAll('.card').forEach(card => {
+    const visible = card.querySelectorAll('.row:not(.hidden)');
+    card.classList.toggle('hidden', visible.length === 0);
+  });
+  // Hide section if all its cards are hidden
+  document.querySelectorAll('.section').forEach(sec => {
+    const visible = sec.querySelectorAll('.card:not(.hidden)');
+    sec.classList.toggle('hidden', visible.length === 0);
+  });
+});
+</script>
+</body>
+</html>

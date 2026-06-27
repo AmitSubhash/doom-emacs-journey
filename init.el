@@ -54,9 +54,11 @@
        (eval +overlay)          ; run code inline
        (lookup +dictionary +docsets)
        lsp                      ; language server protocol
+       llm                      ; gptel + magit commit AI + ob-gptel org blocks
        magit                    ; git interface (the best git UI anywhere)
        pdf                      ; read PDFs inside Emacs
        rgb                      ; color previews
+       tree-sitter              ; tree-sitter integration for supported langs
 
        :os
        (:if IS-MAC macos)       ; mac-specific fixes
@@ -64,7 +66,7 @@
 
        :lang
        (org                     ; THE killer feature
-        +roam2                  ; zettelkasten-style linked notes
+        +roam                   ; zettelkasten-style linked notes
         +pretty                 ; prettier org with icons
         +journal                ; daily journal entries
         +dragndrop              ; drag images into org files
@@ -74,8 +76,9 @@
         +present)               ; presentations from org files
        (python                  ; Python — your main research language
         +lsp
-        +pyright)               ; fast type checking
-       (javascript +lsp)
+        +pyright
+        +tree-sitter)           ; faster, more accurate syntax highlighting
+       (javascript +lsp +tree-sitter)
        (markdown +grip)         ; preview markdown in browser
        (sh +lsp)                ; shell scripts
        (json +lsp)

@@ -1,0 +1,31 @@
+# name: Paper review note
+# key: paper-review
+# --
+* ${1:Paper Title}
+:PROPERTIES:
+:DATE:     `(format-time-string "%Y-%m-%d")`
+:AUTHORS:  ${2:Author et al.}
+:YEAR:     ${3:2024}
+:JOURNAL:  ${4:Journal}
+:DOI:      ${5:doi}
+:RATING:   ${6:3}/5
+:END:
+
+** Summary
+${7:One paragraph summary of the main contribution.}
+
+** Methods
+${8:Key methods used.}
+
+** Results
+${9:Main results and findings.}
+
+** Relevance to My Work
+${10:How this connects to DOT/neonatal imaging/MCX.}
+
+** Critiques
+${11:Limitations or concerns.}
+
+** Action Items
+- [ ] ${12:Read supplemental}
+$0

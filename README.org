@@ -1,0 +1,1183 @@
+#+title: Doom Emacs - Collaborator Workspace Guide
+#+author: Amit Subhash
+#+startup: overview
+
+* Quick Start
+
+If you only need the shortest path to being productive:
+
+#+begin_example
+1. C-c h      -- Open this guide in the bottom pane
+2. SPC SPC    -- Find a file in the current project
+3. SPC A w    -- Launch the Collaborator workspace
+4. C-c C-'    -- Open the Claude Code menu
+5. SPC o p    -- Toggle the file tree
+6. SPC ,      -- Switch buffers
+7. SPC X      -- Capture a task or note without losing focus
+#+end_example
+
+If you want the visual browser-based reference instead, use =C-c H=.
+
+* Using This Guide
+
+=C-c h= opens this file in a focused bottom pane so you can glance at it
+without losing your main layout.
+
+Inside the guide:
+
+| Key     | Action                              |
+|---------+-------------------------------------|
+| =q=     | Close the guide window              |
+| =TAB=   | Fold or unfold the current heading  |
+| =gg=    | Jump to the top                     |
+| =/=     | Search inside the guide             |
+| =n / N= | Next / previous search result       |
+| =C-c H= | Open the visual cheatsheet instead  |
+
+Start here when you are unsure:
+
+- Need files: =SPC SPC=
+- Need buffers: =SPC ,=
+- Need command search: =SPC :=
+- Need a project layout: =SPC TAB n= then =SPC A w=
+- Need help without context switching: =C-c h=
+
+* Learn These First
+
+These are the highest-value keys in this setup. If you internalize only this
+section, the rest of the guide becomes optional reference rather than required
+reading.
+
+| Key         | Why it matters                              |
+|-------------+---------------------------------------------|
+| =ESC=       | Get out of insert mode or many transient states |
+| =C-g=       | Cancel the current prompt or command        |
+| =SPC SPC=   | Open a file in the project                  |
+| =SPC .=     | Open a file relative to the current file    |
+| =SPC ,=     | Switch buffers quickly                      |
+| =SPC w h/j/k/l= | Move between windows                   |
+| =SPC TAB n= | Create a separate workspace per project     |
+| =SPC A w=   | Build the full collaborator layout          |
+| =C-c C-'=   | Open the Claude Code control menu           |
+| =SPC X=     | Capture a task or note immediately          |
+| =SPC o a a= | Open the agenda                             |
+| =C-c h=     | Reopen this guide                           |
+
+* Core Editing Basics
+
+Doom uses Evil, so most buffers start in normal mode. Learn the handful of
+motions below first and the rest can follow naturally.
+
+** Normal mode
+
+| Key     | Action                    |   |
+|---------+---------------------------+---|
+| =h j k l= | Move left/down/up/right   |   |
+| =w / b=   | Move forward/back by word |   |
+| =0 / $=   | Jump to start/end of line |   |
+| =/=       | Search in buffer          |   |
+| =n=       | Jump to next match        |   |
+| =u=       | Undo                      |   |
+| =C-r=     | Redo                      |   |
+| =dd=      | Delete current line       |   |
+| =o / O=   | Open line below / above   |   |
+| =V=       | Select whole lines        |   |
+| =<< / >>= | Shift line left / right   |   |
+
+** Insert mode
+
+| Key     | Action                          |
+|---------+---------------------------------|
+| =i=     | Enter insert mode               |
+| =a=     | Append after point              |
+| =ESC=   | Return to normal mode           |
+| =C-d=   | De-indent while typing          |
+
+** Essential leader keys
+
+| Key         | Action                          |
+|-------------+---------------------------------|
+| =SPC .=     | Find file from here             |
+| =SPC SPC=   | Find file in project            |
+| =SPC ,=     | Switch buffer                   |
+| =SPC b d=   | Kill current buffer             |
+| =SPC w v=   | Vertical split                  |
+| =SPC w s=   | Horizontal split                |
+| =SPC w w=   | Jump between windows            |
+| =SPC :=     | Run command by name             |
+| =SPC h=     | Help menu                       |
+| =SPC f s=   | Save current file               |
+| =C-c h=     | Open the local guide below      |
+
+** Getting unstuck
+
+- =ESC ESC ESC= clears many temporary states and prompts.
+- =C-g= cancels the current operation or minibuffer prompt.
+- =SPC ,= or =SPC b b= gets you back to a known buffer.
+- =SPC b d= kills a disposable buffer you got trapped in.
+- =C-c h= brings the guide back at the bottom if you forget what to do next.
+
+* Common Recipes
+
+Use these when you know the job you want done but not the exact command.
+
+** Start coding with Claude beside you
+
+#+begin_example
+SPC TAB n   -> new workspace for the project
+SPC SPC     -> open a project file
+SPC o p     -> show treemacs if you want the file tree
+SPC A w     -> build the collaborator layout
+C-c C-'     -> start or manage Claude Code
+#+end_example
+
+** Find something fast
+
+| Goal                     | Command     |
+|--------------------------+-------------|
+| Find a file in project   | =SPC SPC=   |
+| Find a file from here    | =SPC .=     |
+| Search in current buffer | =SPC s s=   |
+| Search in project        | =SPC s p=   |
+| Jump to a symbol         | =SPC c j=   |
+| Switch buffers           | =SPC ,=     |
+
+** Capture something without breaking flow
+
+#+begin_example
+SPC X  -> pick:
+t       task
+n       note
+r       research idea
+j       journal entry
+#+end_example
+
+Finish with =C-c C-c= and return to what you were doing.
+
+** Recover from a messy layout
+
+| Problem                       | Command        |
+|-------------------------------+----------------|
+| Too many windows              | =SPC A q=      |
+| Lost your window arrangement  | =SPC w u=      |
+| Need a fresh project cockpit  | =SPC A W=      |
+| Need the guide again          | =C-c h=        |
+
+* The Collaborator Layout
+
+=SPC A w= sets up the full agentic workspace:
+
+#+begin_example
++------+----------+----------+----------+
+| Tree |  Code    |  Claude  |  Notes   |
+| macs |  Editor  |  Code    |  (org)   |
+|      |          |          |          |
+|      |          |          |          |
++------+----------+----------+----------+
+#+end_example
+
+Open treemacs first (=SPC o p=), then =SPC A w=. Treemacs stays pinned on
+the left, and the collaborator splits the remaining space into three columns.
+
+| Key       | Action                                         |
+|-----------+------------------------------------------------|
+| =SPC A w= | Launch collaborator layout                     |
+| =SPC A W= | Create/switch project cockpit workspace        |
+| =SPC A t= | Toggle agent panel on/off                      |
+| =SPC A q= | Close all panels, back to single code buffer   |
+| =SPC A c= | Start/toggle Claude Code IDE                   |
+| =SPC A g= | Open gptel chat buffer                         |
+| =SPC A m= | Open gptel menu                                |
+| =SPC A R= | Rewrite active region with gptel               |
+| =SPC A M= | Connect gptel to MCP tools                     |
+| =SPC A e= | Open eat terminal (fast, pure-elisp)           |
+| =SPC A v= | Toggle vterm                                   |
+| =SPC A s= | Open BR200 shell                               |
+| =SPC A r= | Open BR200 + start Claude                      |
+| =SPC A h= | MCP server hub                                 |
+| =SPC A a= | Agent shell (ACP, needs =claude-agent-acp=)    |
+
+The collaborator layout no longer opens a terminal by default. Use =SPC A e=
+or =SPC A v= only when you actually need one.
+
+* Claude Code
+
+Two packages, complementary roles. No API key needed -- uses your Claude
+subscription.
+
+** claude-code-ide (primary -- MCP bridge + diff review)
+
+=C-c C-'= opens the transient menu. This is the main interface.
+
+| Key         | Action                             |
+|-------------+------------------------------------|
+| =C-c C-'=   | Transient menu (start here)        |
+| =C-c c c=   | Start / toggle Claude session      |
+| =C-c c p=   | Send prompt from minibuffer        |
+| =C-c c @=   | Send selected region to Claude     |
+| =C-c c r=   | Resume previous conversation       |
+| =C-c c k=   | Continue most recent conversation  |
+| =C-c c s=   | List / switch sessions             |
+| =C-c c t=   | Toggle Claude window visibility    |
+| =C-c c g=   | Open gptel chat buffer             |
+| =C-c c m=   | Open gptel menu                    |
+| =C-c c w=   | Rewrite selected region with gptel |
+
+Features:
+- Bidirectional MCP bridge (Claude can read your buffers, xref, imenu)
+- Diff panel for reviewing AI-proposed changes
+- Window on the right, 88 columns wide
+- Emacs MCP tools enabled (xref, treesitter, imenu, project info)
+
+** claude-code.el (multi-instance runner)
+
+For running multiple Claude sessions simultaneously.
+
+| Key         | Action                               |
+|-------------+--------------------------------------|
+| =C-c c n=   | New named instance ("frontend", etc) |
+| =C-c c b=   | Switch instance (current project)    |
+| =C-c c B=   | Switch instance (all projects)       |
+| =C-c c K=   | Kill all instances                   |
+
+Example: run one Claude on your Python backend and another on your React
+frontend. Each gets its own terminal buffer.
+
+* Workspaces (per-project layouts)
+
+Doom's workspace module (=persp-mode=) gives you isolated environments.
+Each workspace remembers its window layout, open buffers, and state.
+
+| Key           | Action                         |
+|---------------+--------------------------------|
+| =SPC TAB n=   | New workspace (enter a name)   |
+| =SPC TAB TAB= | Switch workspace (pick list)   |
+| =SPC TAB .=   | Switch by name                 |
+| =SPC TAB 1-9= | Jump to workspace by number    |
+| =SPC TAB d=   | Delete workspace               |
+| =SPC TAB r=   | Rename workspace               |
+| =SPC TAB s=   | Save workspace to disk         |
+| =SPC TAB l=   | Load saved workspace           |
+
+** Multi-project workflow
+
+#+begin_example
+1.  SPC TAB n  ->  name it "dot-research"
+2.  Open your DOT project files
+3.  SPC o p    ->  Treemacs for this project
+4.  SPC A w    ->  Collaborator layout
+5.  C-c C-'    ->  Start Claude in the agent panel
+    -- Layout is now saved to this workspace --
+
+6.  SPC TAB n  ->  name it "fp8-hpc"
+7.  Open FP8 project files
+8.  SPC A w    ->  Fresh layout for this project
+9.  C-c c n    ->  Named Claude instance "fp8-training"
+
+10. SPC TAB 1  ->  Jump back to dot-research (intact)
+11. SPC TAB 2  ->  Jump back to fp8-hpc (intact)
+#+end_example
+
+Each workspace keeps its own window arrangement, Claude sessions, and
+terminal buffers completely separate.
+
+* Treemacs (file tree)
+
+Toggle with =SPC o p=. Stays pinned on the left side.
+
+** Navigation
+
+| Key       | Action                          |
+|-----------+---------------------------------|
+| =j / k=   | Move down / up                  |
+| =TAB=     | Expand / collapse folder        |
+| =RET=     | Open file in code window        |
+| =o h=     | Open in horizontal split        |
+| =o v=     | Open in vertical split          |
+| =o o=     | Open in other window            |
+| =q=       | Hide treemacs (still running)   |
+| =?=       | Show ALL keybindings            |
+| =P=       | Peek at file (no switch)        |
+
+
+** File operations
+
+| Key     | Action          |
+|---------+-----------------|
+| =c f=   | Create file     |
+| =c d=   | Create directory |
+| =R=     | Rename          |
+| =d=     | Delete          |
+| =m=     | Move            |
+| =y f=   | Copy file path  |
+| =y r=   | Copy relative path |
+
+** Project management
+
+| Key           | Action                     |
+|---------------+----------------------------|
+| =C-c C-p a=   | Add project to treemacs    |
+| =C-c C-p d=   | Remove project             |
+| =C-c C-p n=   | Next project at root       |
+| =M-H / M-L=   | Navigate between projects  |
+
+** LSP integration (enabled via =+lsp=)
+
+Treemacs shows LSP symbols and errors. When you have a Python or JS file
+open with LSP active:
+- Error files are highlighted in the tree
+- You can expand files to see symbols (functions, classes)
+
+* Window Navigation
+
+Moving between panels in the collaborator layout (or any layout):
+
+| Key                 | Action                        |
+|---------------------+-------------------------------|
+| =SPC w h/j/k/l=     | Move to window left/down/up/right |
+| =C-w h/j/k/l=       | Same (vim style)              |
+| =SPC w H/J/K/L=     | Move window itself            |
+| =SPC w == or =C-w ==| Balance window sizes          |
+| =SPC w v=           | Vertical split                |
+| =SPC w s=           | Horizontal split              |
+| =SPC w q=           | Close current window          |
+| =SPC w m=           | Maximize current window       |
+| =SPC w u=           | Undo window layout change     |
+| =SPC 1-9=           | Jump to window by number      |
+
+The =window-select +numbers= module shows numbers in each window's
+modeline. =SPC 1= jumps to window 1, =SPC 2= to window 2, etc.
+
+* Terminals
+
+Two terminal emulators available. Use both for different purposes.
+
+** vterm (default)
+
+| Key         | Action                       |
+|-------------+------------------------------|
+| =SPC o t=   | Toggle vterm popup           |
+| =SPC A v=   | Toggle vterm (collaborator)  |
+
+Full terminal emulation. Good for interactive programs (htop, ssh, etc).
+
+** eat (new, fast)
+
+| Key         | Action                |
+|-------------+-----------------------|
+| =SPC A e=   | Open eat terminal     |
+
+Pure elisp, 3x faster than term-mode. Good for quick commands. Supports
+mouse and sixel (images in terminal).
+
+** Running multiple terminals
+
+Open several eat or vterm buffers. Switch with =SPC b b= (buffer list).
+In the collaborator layout, the bottom-middle panel is a terminal -- open
+more in splits with =SPC w s= or =SPC w v=.
+
+* MCP Hub
+
+=SPC A h= opens the MCP server management interface.
+
+Two servers preconfigured:
+- =filesystem= -- gives LLMs file access to =~/=
+- =fetch= -- HTTP fetching for LLMs
+
+| Key (in hub) | Action          |
+|--------------+-----------------|
+| =s=          | Start server    |
+| =k=          | Stop server     |
+| =r=          | Restart server  |
+
+Add more servers by editing =mcp-hub-servers= in =collaborator.el=:
+
+#+begin_src emacs-lisp
+(setq mcp-hub-servers
+      '(("filesystem"
+         :command "npx"
+         :args ("-y" "@modelcontextprotocol/server-filesystem" "/Users/amit/"))
+        ("fetch"
+         :command "uvx"
+         :args ("mcp-server-fetch"))
+        ;; Add your own:
+        ("github"
+         :command "npx"
+         :args ("-y" "@modelcontextprotocol/server-github"))))
+#+end_src
+
+* Magit (git)
+
+| Key         | Action                            |
+|-------------+-----------------------------------|
+| =SPC g g=   | Magit status (full-frame)         |
+| =SPC g b=   | Git blame                         |
+| =SPC g l=   | Git log                           |
+| =SPC g d=   | Diff                              |
+| =SPC g f=   | Fetch                             |
+
+Inside magit status:
+| Key | Action             |
+|-----+--------------------|
+| =s= | Stage file/hunk    |
+| =u= | Unstage            |
+| =c c= | Commit           |
+| =P p= | Push             |
+| =F p= | Pull             |
+| =b b= | Switch branch    |
+| =b c= | Create branch    |
+| =q= | Quit magit         |
+
+* Org Mode
+
+Your productivity backbone. All files live in =~/org/=.
+
+** Journal
+
+=SPC n j j= opens today's journal entry in =~/org/journal/=. Use it for daily
+planning, reflections, and lightweight task tracking.
+
+For quick TODOs inside a journal entry, write headings like:
+
+#+begin_src org
+TODO Draft preprocessing note
+DEADLINE: <2026-04-02 Thu>
+#+end_src
+
+Then use:
+- =SPC m d d= to add a deadline
+- =SPC m d s= to schedule it
+- =SPC m p= to set priority
+- =t= in normal mode to cycle the TODO state
+
+** Roam notes
+
+Org-roam is your long-term knowledge graph. One note per idea works best.
+
+| Key         | Action                              |
+|-------------+-------------------------------------|
+| =SPC n r f= | Find or create note                 |
+| =SPC n r i= | Insert link to another roam note    |
+| =SPC n r b= | Show backlinks                      |
+| =SPC n r d d= | Open daily roam note              |
+| =SPC n g=   | Open the roam graph                 |
+
+Useful note metadata:
+
+#+begin_src org
+#+filetags: :neuroengineering:dot:mcx:
+#+end_src
+
+A simple note shape that scales well:
+
+#+begin_src org
+Brief summary in your own words.
+
+* Key Ideas
+
+* Relation to My Work
+* References
+* Questions
+#+end_src
+
+Rename a roam note with =M-x org-roam-rename-file=.
+
+** Agenda
+
+=SPC o a a= opens the agenda dispatcher. Press =a= for the weekly agenda or =n=
+for agenda + TODOs together.
+
+Your agenda pulls from:
+- =~/org/= and =~/org/journal/= for tasks and notes
+- =~/org/outlook-cal.org= for the synced Outlook calendar
+
+Calendar sync is configured in =config.el=. Run =M-x my/sync-outlook-calendar=
+any time you want a fresh pull.
+
+** Core keybindings
+
+| Key           | Action                              |
+|---------------+-------------------------------------|
+| =SPC o a a=   | Open agenda                         |
+| =SPC X=       | Capture (quick-add task/note/idea)  |
+| =SPC n r f=   | Find roam note                      |
+| =SPC n r i=   | Insert roam link                    |
+| =SPC n r c=   | Capture to roam                     |
+| =SPC n g=     | Roam graph (visual node map)        |
+| =SPC n j j=   | Today's journal entry               |
+
+** Capture templates (=SPC X=)
+
+Quick capture is your interrupt-safe inbox. Drop the thought in, save with
+=C-c C-c=, and go back to the task you were on.
+
+| Key | Template         | Goes to                      |
+|-----+------------------+------------------------------|
+| =t= | Task             | =~/org/inbox.org > Tasks=    |
+| =n= | Note             | =~/org/inbox.org > Notes=    |
+| =r= | Research idea    | =~/org/research.org > Ideas= |
+| =j= | Journal entry    | =~/org/journal.org=          |
+
+** In org buffers
+
+| Key         | Action                          |
+|-------------+---------------------------------|
+| =TAB=       | Fold / unfold heading           |
+| =S-TAB=     | Fold / unfold all               |
+| =M-RET=     | New heading at same level       |
+| =M-h/l=     | Promote / demote heading        |
+| =M-j/k=     | Move heading up / down          |
+| =t=         | Cycle TODO state (normal mode)  |
+| =SPC m d d= | Add deadline                    |
+| =SPC m d s= | Add schedule                    |
+| =SPC m p=   | Set priority                    |
+| =SPC m e=   | Export (HTML, PDF, etc.)        |
+| =C-c C-c=   | Execute source block / confirm  |
+
+To insert a source block quickly, run =M-x org-insert-structure-template= and
+choose =s=.
+
+** Citations (Zotero/BibTeX)
+
+| Key           | Action                     |
+|---------------+----------------------------|
+| =SPC n b b=   | Insert citation            |
+| =SPC n b o=   | Open paper PDF/URL         |
+| =SPC n b n=   | Open/create notes for ref  |
+| =SPC n b B=   | Open bibliography entry    |
+
+* PDF Reading
+
+Open any PDF in Emacs (just visit the file). Uses =pdf-tools=.
+
+| Key       | Action                |
+|-----------+-----------------------|
+| =n / p=   | Next / previous page  |
+| =+ / -=   | Zoom in / out         |
+| =s w=     | Fit width             |
+| =o=       | Outline / TOC         |
+| =C-s=     | Search                |
+| =h=       | Highlight selection   |
+
+Combine with =org-noter= (=SPC n b n= on a citation) to take linked notes
+alongside a PDF.
+
+* LSP (Language Server)
+
+Auto-starts for Python (pyright), JavaScript, Shell, JSON, YAML, LaTeX.
+
+| Key           | Action                            |
+|---------------+-----------------------------------|
+| =K=           | Show documentation at point       |
+| =g d=         | Go to definition                  |
+| =g r=         | Find references                   |
+| =SPC c a=     | Code actions                      |
+| =SPC c r=     | Rename symbol                     |
+| =SPC c d=     | Show diagnostics                  |
+| =SPC c f=     | Format buffer                     |
+| =SPC c j=     | Jump to symbol in file            |
+| =SPC c J=     | Jump to symbol in workspace       |
+| =SPC c x=     | Show error list                   |
+
+* Search and Navigation
+
+| Key           | Action                               |
+|---------------+--------------------------------------|
+| =SPC SPC=     | Find file in project                 |
+| =SPC .=       | Find file (from here)                |
+| =SPC ,=       | Switch buffer                        |
+| =SPC /=       | Search in project (ripgrep)          |
+| =SPC s s=     | Search in current buffer             |
+| =SPC s p=     | Search in project                    |
+| =SPC s d=     | Search in directory                  |
+| =SPC p p=     | Switch project                       |
+| =SPC f r=     | Recent files                         |
+
+* Daily Workflow Example
+
+#+begin_example
+-- Morning: DOT research --
+
+1.  Open Emacs (maximized automatically)
+2.  SPC TAB n  ->  "dot-research"
+3.  SPC .      ->  Open ~/projects/dot-imaging/main.py
+4.  SPC o p    ->  Treemacs (see all project files)
+5.  SPC A w    ->  Collaborator layout
+6.  C-c C-'    ->  Claude Code transient menu
+                   Start a session, ask about the codebase
+
+7.  Work in code (left panel), chat with Claude (middle)
+8.  SPC w l    ->  Jump to Claude panel
+9.  SPC w h    ->  Jump back to code
+10. Take notes in the right panel (org-mode)
+11. SPC A e    ->  Need a terminal? Eat pops up.
+
+-- Switch to FP8 project --
+
+12. SPC TAB n  ->  "fp8-training"
+13. SPC p p    ->  Switch to fp8 project root
+14. SPC A w    ->  Fresh collaborator layout
+15. C-c c n    ->  New Claude instance named "fp8-debug"
+
+-- Switch back --
+
+16. SPC TAB 1  ->  "dot-research" is exactly as you left it
+17. SPC TAB 2  ->  "fp8-training" also intact
+
+-- End of day --
+
+18. SPC TAB s  ->  Save workspace (restores on next launch)
+#+end_example
+
+* Essential Shortcuts (cheat sheet)
+
+| Category    | Key           | Action                         |
+|-------------+---------------+--------------------------------|
+| Files       | =SPC .=       | Find file                      |
+| Files       | =SPC SPC=     | Find in project                |
+| Buffers     | =SPC ,=       | Switch buffer                  |
+| Buffers     | =SPC b k=     | Kill buffer                    |
+| Search      | =SPC /=       | Ripgrep in project             |
+| Search      | =SPC s s=     | Search current buffer          |
+| Windows     | =SPC w h/l=   | Move left/right                |
+| Windows     | =SPC 1-9=     | Jump to window number          |
+| Workspaces  | =SPC TAB n=   | New workspace                  |
+| Workspaces  | =SPC TAB 1-9= | Switch workspace               |
+| Treemacs    | =SPC o p=     | Toggle file tree               |
+| Claude      | =C-c C-'=     | Claude Code menu               |
+| Claude      | =C-c c n=     | New Claude instance            |
+| Claude      | =C-c c @=     | Send selection to Claude       |
+| Collaborator| =SPC A w=     | Workspace layout               |
+| Collaborator| =SPC A t=     | Toggle agent panel             |
+| Collaborator| =SPC A q=     | Close panels                   |
+| Git         | =SPC g g=     | Magit status                   |
+| Org         | =SPC X=       | Capture                        |
+| Org         | =SPC o a a=   | Agenda                         |
+| Terminal    | =SPC o t=     | Vterm popup                    |
+| Terminal    | =SPC A e=     | Eat terminal                   |
+| Help        | =SPC h k=     | Describe key (what does X do?) |
+| Help        | =SPC h f=     | Describe function              |
+| Misc        | =SPC t z=     | Zen mode (distraction free)    |
+| Misc        | =SPC t o=     | Olivetti (centered writing)    |
+| Misc        | =F8=          | Start/stop presentation mode   |
+
+* Files
+
+| File              | Purpose                                    |
+|-------------------+--------------------------------------------|
+| =~/.config/doom/init.el=        | Enabled modules              |
+| =~/.config/doom/packages.el=    | Package declarations         |
+| =~/.config/doom/config.el=      | Main configuration           |
+| =~/.config/doom/collaborator.el=| Collaborator workspace module|
+| =~/org/inbox.org=               | Capture inbox                |
+| =~/org/research.org=            | Research ideas               |
+| =~/org/outlook-cal.org=         | Synced Outlook calendar      |
+| =~/org/journal/=                | Daily journal files          |
+| =~/org/roam/=                   | Zettelkasten notes           |
+| =~/org/collaborator.org=        | Collaborator scratch notes   |
+| =~/org/today.org=               | Daily startup + focus list   |
+| =~/org/references.bib=          | Zotero bibliography export   |
+
+Typical org tree:
+
+#+begin_example
+~/org/
+  inbox.org
+  research.org
+  outlook-cal.org
+  today.org
+  journal/
+  roam/
+#+end_example
+
+After editing =init.el= or =packages.el=, run:
+#+begin_src sh
+~/.config/emacs/bin/doom sync
+#+end_src
+
+After editing =config.el= or =collaborator.el=, restart Emacs or run
+=M-x eval-buffer= if you know the change is safe to reload live.
+
+* Troubleshooting
+
+| Problem                     | Fix                                      |
+|----------------------------+-------------------------------------------|
+| Weird modal state          | =ESC ESC ESC= or =C-g=                    |
+| Stuck in a disposable buffer | =SPC b d= or =q=                        |
+| Need a reset               | =SPC q r= restart Emacs                   |
+| Config change not taking   | =M-x eval-buffer= or restart              |
+| Package behavior is stale  | Run =doom sync=, then restart             |
+| Agenda feels wrong         | Press =.= for today or rerun calendar sync |
+| Claude window missing      | =C-c c t= or =C-c C-'=                    |
+
+* Operating Principles
+
+- Journal daily. Keep it lightweight instead of waiting for the perfect format.
+- One idea per roam note. Link generously and let backlinks do the work.
+- Capture fast with =SPC X= rather than breaking flow to file things perfectly.
+- Use the agenda as the command center, not as a dumping ground.
+- When in doubt, press =SPC= and inspect the menu for the current context.
+
+* First Week Learning Plan
+
+1. Day 1: Open the agenda, write a journal entry, and practice =SPC= navigation.
+2. Day 2: Add TODOs with deadlines and mark a few done from the journal.
+3. Day 3: Create 2-3 roam notes from one paper and connect them.
+4. Day 4: Use =SPC X= throughout the day instead of holding tasks in memory.
+5. Day 5: Open a coding project, use treemacs, LSP, and Magit once each.
+6. Day 6: Add an org source block, export a note, and annotate one PDF.
+7. Day 7: Review what felt clumsy and then adjust config, fonts, or key habits.
+
+* Navigation & Quality of Life
+
+Features that make everyday editing smoother. Most are passive -- they just
+work without you thinking about them.
+
+** Relative Line Numbers
+
+Every buffer shows relative line numbers in the left gutter. The current line
+shows the absolute number; lines above/below show the distance.
+
+#+begin_example
+  3  (defun helper ()
+  2    (let ((x 10))
+  1      (+ x 20)))
+ 47  (defun my-function ()     <-- you are here (line 47)
+  1    (let ((result (helper)))
+  2      (message "got %s" result)))
+  3
+#+end_example
+
+This makes vim-style jumping precise:
+- =5j= jumps down 5 lines (to the exact line showing "5")
+- =12k= jumps up 12 lines
+- No more counting or guessing
+
+** Which-Key (leader key discovery)
+
+Press =SPC= and wait 0.3 seconds. A popup shows every available next key
+with a description. Works recursively:
+
+#+begin_example
+SPC       -> shows all top-level categories
+SPC n     -> shows all "notes" commands
+SPC n z   -> shows all "focus" commands
+SPC TAB   -> shows all "workspace" commands
+#+end_example
+
+This is your safety net. You never need to memorize keybindings -- just press
+the prefix and read the menu. The 0.3s delay (default is 1s) keeps it snappy.
+
+** Window Select (numbered windows)
+
+Each window shows a number in its modeline. Jump directly with =SPC 1= through
+=SPC 9= instead of cycling with =SPC w w=.
+
+In the Collaborator layout:
+- =SPC 1= = code editor (left)
+- =SPC 2= = Claude panel (middle)
+- =SPC 3= = notes (right)
+
+** Winner Mode (window layout undo/redo)
+
+| Key           | Action                              |
+|---------------+-------------------------------------|
+| =C-c left=    | Undo last window layout change      |
+| =C-c right=   | Redo window layout change           |
+
+Accidentally closed a split? =C-c left= brings it back instantly. Works
+across any number of layout changes -- it keeps a full history.
+
+** Scrolling
+
+Standard Emacs scrolling is in use. The old =good-scroll= setup was removed
+because it could keep Emacs hot on macOS with a high-rate render timer.
+
+** Super-Save (auto-save)
+
+Automatically saves your file when you:
+- Switch to another buffer (=SPC ,=, =SPC b b=)
+- Switch to another window (=SPC w l=, clicking)
+- Idle for a few seconds
+
+You almost never need =SPC f s= or =C-x C-s= anymore. Unsaved changes are
+a thing of the past.
+
+** Recent Files
+
+=SPC f r= shows the 200 most recently opened files. Faster than navigating
+the file tree for files you were just working on.
+
+** Embedded Browser (xwidget-webkit)
+
+A full Chromium-based browser running inside Emacs. Used for:
+- Org-roam graph visualization (=SPC n g=)
+- Opening documentation links from LSP
+- Browsing without leaving the editor
+
+| Key         | Action (inside xwidget buffer)     |
+|-------------+------------------------------------|
+| =SPC o w=   | Open URL in embedded browser       |
+| =SPC o W=   | Open URL in Safari (fallback)      |
+| =g=         | Go to URL                          |
+| =r=         | Reload                             |
+| =b=         | Back                               |
+| =f=         | Forward                            |
+| =q=         | Quit browser buffer                |
+
+** Zen Mode & Olivetti
+
+Two distraction-free modes that pair well:
+
+| Key         | Action                                          |
+|-------------+-------------------------------------------------|
+| =SPC t z=   | Zen mode -- hides modeline, line numbers, etc.  |
+| =SPC t o=   | Olivetti -- centers text in a 90-column body     |
+
+Great for writing papers, journal entries, or reading long org files.
+Use both together: =SPC t z= then =SPC t o= for maximum focus.
+
+** Confirm Quit
+
+=SPC q q= asks "Really quit?" before closing Emacs. Prevents the accidental
+quit that kills your 15 open buffers and Claude session. Answer =y= or =n=.
+
+** Emacs Server
+
+Emacs starts a server automatically. From any terminal:
+
+#+begin_src sh
+emacsclient file.py       # opens instantly in running Emacs
+emacsclient -n file.py    # same, but don't wait for you to close it
+#+end_src
+
+No more waiting for Emacs to start. The running instance handles everything.
+
+* Presentations (org-tree-slide)
+
+Turn any org file into a slide deck. Each top-level =*= heading becomes one slide.
+
+| Key   | Action                          |
+|-------+---------------------------------|
+| =F8=  | Start / stop presentation mode  |
+| =F9=  | Previous slide                  |
+| =F10= | Next slide                      |
+
+When presentation mode activates:
+- Text scales up 2x
+- Inline images display automatically
+- Buffer becomes read-only (prevents accidental edits)
+- Title and breadcrumbs show at the top
+
+When you stop (=F8= again), everything returns to normal.
+
+* Appointment Reminders & Notifications
+
+Org agenda items with timestamps trigger macOS desktop notifications.
+
+- 15 minutes before: first notification
+- Every 5 minutes after: reminders until the event
+- Uses native macOS notification center (with Glass sound)
+
+Rebuild the appointment list: open the agenda (=SPC o a a=) or it happens
+automatically every hour.
+
+** Quick Reminders
+
+#+begin_example
+M-x my/remind-me
+  When? March 15, 2026 9:00am
+  Title: Lab meeting
+  Body: Bring the DOT preprocessing results
+#+end_example
+
+Fires a macOS notification at the specified time. Only works while Emacs is
+running.
+
+* AutoLog Focus Workflow
+
+A focus-tracking system integrated with org-mode. Tracks what you planned to
+do vs. what you actually did, with drift scoring.
+
+| Key           | Action                                    |
+|---------------+-------------------------------------------|
+| =SPC n z z=   | Daily startup (today + cheatsheet)        |
+| =SPC n z d=   | Open focus dashboard (=~/org/today.org=)  |
+| =SPC n z r=   | Reset today's template                    |
+| =SPC n z s=   | Start a focus block                       |
+| =SPC n z e=   | Stop a focus block                        |
+| =SPC n z t=   | Check focus status                        |
+| =SPC n z l=   | List recent focus blocks                  |
+| =SPC n z p=   | Productivity summary                      |
+| =SPC n z c=   | Open focus command cheatsheet             |
+
+Daily startup flow:
+- open =SPC n z z=
+- fill the 3 bullets in =~/org/today.org=
+- start with =SPC n z s=
+- stop with =SPC n z e=
+
+Integrates with =contextd= screen capture daemon for automated sensing.
+
+* BigRed200 Remote Integration
+
+Direct access to IU's HPC cluster from inside Emacs.
+
+| Key         | Action                                          |
+|-------------+-------------------------------------------------|
+| =SPC A s=   | SSH into BR200 (eat terminal)                   |
+| =SPC A r=   | SSH into BR200 + auto-start Claude Code         |
+| =SPC A d=   | Browse BR200 home directory (TRAMP dired)       |
+| =SPC A D=   | Browse BR200 slate storage (TRAMP dired)        |
+
+The BR200+Claude shortcut (=SPC A r=) automatically:
+1. Opens an eat terminal
+2. SSHs into =br200=
+3. Loads NVM from your slate storage
+4. Starts =claude= on the cluster
+
+TRAMP dired lets you browse remote files as if they were local. Open, edit,
+and save files on BR200 directly from your Mac.
+
+* Environment Protection (technical)
+
+Emacs GUI does not inherit your shell's environment. Doom captures it via
+=doom env= into a cache file. This setup has protections against environment
+variable pollution from Claude Code / Codex sessions.
+
+** Layer 1: Deny patterns (=doom-env-deny=)
+
+Prevents these variables from ever entering the env cache on =doom sync=:
+- =CLAUDECODE=, =CLAUDE_CODE_*=, =CLAUDE_PLUGIN_*=
+- =CODEX_*=
+- =ENABLE_IDE_INTEGRATION=, =FORCE_CODE_TERMINAL=
+- =NO_COLOR=, =GIT_EDITOR=
+
+** Layer 2: Runtime unset
+
+On every Emacs startup, forcibly unsets:
+- =CLAUDECODE= (blocks new Claude sessions if set to 1)
+- =NO_COLOR= (strips color from all subprocesses)
+
+** Workspace buffer protection
+
+Claude buffers (from any launch path) are marked as global -- they are never
+auto-killed when switching or deleting workspaces. Prevents SIGHUP (exit
+code 129). Covers:
+- =*claude-code*= (claude-code-ide)
+- =*claude:<dir>*= and =*claude:<dir>:<instance>*= (claude-code.el)
+- =*Claude Code*= (agent-shell)
+- =*br200*= / =*br200:claude*= (remote terminals)
+
+If the env cache ever gets dirty again:
+#+begin_src sh
+# Regenerate from a clean shell (no Claude session active in this terminal)
+cd ~/.config/emacs && bin/doom env
+#+end_src
+
+* Debugging Python (DAP + debugpy)
+
+Stop using print statements. Step through code, inspect variables, understand
+the flow. This is the single most important skill for leveling up.
+
+** Setup
+
+debugpy is installed system-wide. For project-specific virtualenvs, also run:
+
+#+begin_src sh
+pip install debugpy
+#+end_src
+
+** Core keybindings (=SPC d=)
+
+| Key         | Action                          |
+|-------------+---------------------------------|
+| =SPC d d=   | Debug current Python file       |
+| =SPC d D=   | Debug (pick a template)         |
+| =SPC d b=   | Toggle breakpoint on this line  |
+| =SPC d B=   | Conditional breakpoint          |
+| =SPC d n=   | Step over (next line)           |
+| =SPC d i=   | Step into (dive into function)  |
+| =SPC d o=   | Step out (finish function)      |
+| =SPC d c=   | Continue (run to next breakpoint)|
+| =SPC d e=   | Eval expression at point        |
+| =SPC d E=   | Eval any expression             |
+| =SPC d v=   | Eval selected region            |
+| =SPC d w=   | Add watch expression            |
+| =SPC d r=   | Restart debug session           |
+| =SPC d l=   | Debug last config (re-run)      |
+| =SPC d x=   | Stop debugging                  |
+
+** UI panels (=SPC d u=)
+
+| Key           | Action                        |
+|---------------+-------------------------------|
+| =SPC d u l=   | Locals (all variables in scope)|
+| =SPC d u e=   | Watch expressions             |
+| =SPC d u b=   | All breakpoints               |
+| =SPC d u s=   | Active sessions               |
+| =SPC d u r=   | Debug REPL                    |
+
+** Your first debugging session
+
+#+begin_example
+1.  Open a Python file
+2.  Put cursor on a line you're curious about
+3.  SPC d b      -- red dot appears in the gutter (breakpoint)
+4.  SPC d d      -- debugpy launches, pauses at your breakpoint
+5.  SPC d u l    -- locals panel opens, showing every variable and its value
+6.  SPC d n      -- step to the next line, watch variables change
+7.  SPC d i      -- see a function call? step INTO it
+8.  SPC d o      -- done inside? step OUT back to the caller
+9.  SPC d e      -- hover on any variable to see its current value
+10. SPC d c      -- continue running until the next breakpoint (or end)
+11. SPC d x      -- done. kill the debug session
+#+end_example
+
+** Debugging workflow for bugs
+
+#+begin_example
+-- A function returns the wrong value --
+
+1.  Read the function. Form a hypothesis: "I think the bug is on line X"
+2.  SPC d b on line X (set breakpoint)
+3.  SPC d b on the function entry too (first line of the function)
+4.  SPC d d to start debugging
+5.  When it pauses at entry: SPC d u l to check input values
+    - Are the inputs what you expected?
+    - If not, the bug is UPSTREAM (in the caller). SPC d o, trace back.
+6.  SPC d n to step through line by line
+    - After each step, check: did the variable change the way you expected?
+    - The FIRST line where reality diverges from expectation is the bug.
+7.  Found it? SPC d x to stop. Fix the code. SPC d l to re-run and verify.
+#+end_example
+
+** Debugging tests
+
+#+begin_example
+1.  Open the test file
+2.  SPC d b on the assertion that's failing
+3.  SPC d D, pick "Python :: Pytest Current"
+4.  Pytest runs under debugpy, pauses at your breakpoint
+5.  Check variables: what value does the function actually return?
+6.  SPC d i to step into the function under test
+7.  Trace through until you find the divergence
+#+end_example
+
+** Conditional breakpoints
+
+For loops or functions called many times, a regular breakpoint fires on
+every iteration. Use conditional breakpoints instead:
+
+#+begin_example
+1.  SPC d B on the line inside the loop
+2.  Enter condition: i == 42  (only pauses when i is 42)
+3.  SPC d d to start
+#+end_example
+
+** Tips
+
+- =justMyCode= is set to =false= -- you can step into library code (numpy,
+  torch, etc.). This is how you learn what libraries actually do.
+- The locals panel (=SPC d u l=) updates live as you step. Keep it open.
+- If you hover over a variable with the mouse, its value appears as a tooltip.
+- Use =SPC d w= to add a watch expression (e.g., =len(data)= or =x.shape=)
+  that updates at every step.
+- Multiple breakpoints work. Set them at key points and use =SPC d c= to
+  jump between them.
+
+* Code Investigation (=SPC c I=)
+
+Tools that go beyond what =g d=, =g r=, =K=, and Magit already give you.
+
+** New keybindings (=SPC c I=)
+
+| Key           | Action                     | Question it answers            |
+|---------------+----------------------------+--------------------------------|
+| =SPC c I h=   | Call hierarchy (incoming)  | "Full tree of who calls this"  |
+| =SPC c I H=   | Call hierarchy (outgoing)  | "Everything this calls"        |
+| =SPC c I s=   | Symbols in this file       | "What's in this file?"         |
+| =SPC c I S=   | Symbols in project         | "Find any function/class"      |
+| =SPC c I e=   | All errors/warnings        | "What's broken right now?"     |
+| =SPC c I t=   | Type definition            | "What type is this?"           |
+| =SPC c I T=   | Git time machine           | "Step through file versions"   |
+
+** You already have these (use them)
+
+| Key       | Action                    | Where        |
+|-----------+---------------------------+--------------|
+| =g d=     | Go to definition          | Doom default |
+| =g r=     | Find references           | Doom default |
+| =K=       | Show docs at point        | Doom default |
+| =C-o=     | Jump back                 | Doom default |
+| =SPC /=   | Ripgrep search in project | Doom default |
+| =SPC g g= | Magit status              | Magit        |
+| =SPC g b= | Git blame                 | Magit        |
+| =SPC g l= | Git log                   | Magit        |
+
+** Investigation workflow
+
+#+begin_example
+-- Dropped into unfamiliar code --
+
+1.  SPC c I s      -- list symbols in file. Read the names. Get the shape.
+2.  Cursor on main function. g d to jump to definition.
+3.  See an unfamiliar call? g d again. Chain it. C-o to jump back.
+4.  SPC c I H      -- outgoing call hierarchy. This IS the architecture.
+5.  SPC c I h      -- incoming call hierarchy. This is how it's USED.
+
+-- Something is broken --
+
+1.  SPC c I e      -- all errors. Is it showing up?
+2.  g r            -- who calls the broken function? Wrong args?
+3.  SPC g b        -- git blame. When was this last changed?
+4.  SPC c I T      -- git time machine. Find the version where it worked.
+5.  Now you have a hypothesis. THEN ask Claude:
+    C-c c p        -- "I think the bug is X because [your evidence]"
+#+end_example
+
+** The debugging mindset
+
+#+begin_quote
+The goal is not to fix the bug. The goal is to UNDERSTAND why it happens.
+If you understand, the fix writes itself.
+#+end_quote
+
+Every time you debug, answer these three:
+1. What did I expect to happen?
+2. What actually happened?
+3. At which exact line did reality diverge from expectation?
+
+If you cannot answer #3, you have not debugged yet.
+
+* Future Upgrades
+
+- Enable =mu4e= when you want email inside Emacs.
+- Replace the read-only Outlook import with a two-way calendar solution later.
+- Add a publishing pipeline when you want a digital garden or notes website.
+
+* Optional: Agent Shell (ACP)
+
+=SPC A a= opens agent-shell, which runs CLI agents via the Agent Client
+Protocol. To use it with Claude Code:
+
+#+begin_src sh
+npm install -g @agentclientprotocol/claude-agent-acp
+#+end_src
+
+Uses login-based auth (same as your Claude subscription). No API key needed.
+
+* Optional: gptel (direct API access)
+
+Gptel is now configured as the fast inline AI lane.
+
+- Default OpenAI model: =gpt-5.4-mini=
+- Anthropic fallback when =ANTHROPIC_API_KEY= is present: =claude-sonnet-4-5=
+- Open chat with =SPC A g= or =C-c c g=
+- Open the transient menu with =SPC A m= or =C-c c m=
+- Rewrite a selected region with =SPC A R= or =C-c c w=
+- Connect MCP tools on demand with =SPC A M=
+
+If you have an API key, set =OPENAI_API_KEY= or =ANTHROPIC_API_KEY= in your
+shell environment before launching Emacs. Keep using Claude Code IDE for
+repo-scoped edits and use gptel for quick explain/rewrite/refactor tasks.

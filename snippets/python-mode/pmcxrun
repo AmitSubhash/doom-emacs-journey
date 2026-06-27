@@ -1,0 +1,30 @@
+# name: pmcx simulation block
+# key: pmcxrun
+# --
+import numpy as np
+import pmcx
+
+cfg = {
+    'nphoton':  ${1:1e7},
+    'vol':      ${2:vol}.astype(np.uint8),
+    'tstart':   0,
+    'tend':     ${3:5e-9},
+    'tstep':    ${4:5e-10},
+    'srcpos':   [${5:29}, ${6:29}, ${7:0}],
+    'srcdir':   [${8:0}, ${9:0}, ${10:1}],
+    # rows: [mua, mus, g, n]  — index 0 = exterior (must be all zeros)
+    'prop': [
+        [0,    0,    1,    1   ],   # 0: exterior
+        [${11:0.02}, ${12:9.0}, ${13:0.9}, ${14:1.37}],   # 1: ${15:tissue}
+    ],
+    'issavedet':  1,
+    'issaveexit': 1,
+    'isreflect':  1,
+    'detpos': [[${16:29}, ${17:20}, ${18:0}, ${19:2}]],   # [x, y, z, radius_mm]
+    'unitinmm': ${20:1.0},
+}
+
+res = pmcx.run(cfg)
+flux = res['flux']     # fluence rate (1/mm^2/s), shape == vol.shape + (ntime,)
+det  = res.get('detp') # detected photon data
+$0

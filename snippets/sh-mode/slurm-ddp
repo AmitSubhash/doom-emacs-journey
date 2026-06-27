@@ -3,7 +3,7 @@
 # --
 #!/bin/bash
 #SBATCH --job-name=${1:ddp_job}
-#SBATCH --account=your-account-id
+#SBATCH --account=r00602
 #SBATCH --partition=gpu
 #SBATCH --nodes=${2:2}
 #SBATCH --ntasks-per-node=${3:4}

@@ -3,7 +3,7 @@
 # --
 #!/bin/bash
 #SBATCH --job-name=${1:sweep}
-#SBATCH --account=your-account-id
+#SBATCH --account=r00602
 #SBATCH --partition=${2:gpu}
 #SBATCH --array=0-${3:9}%${4:4}
 #SBATCH --nodes=1
